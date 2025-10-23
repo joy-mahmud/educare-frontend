@@ -9,33 +9,54 @@ const Navbar = () => {
         setShowDropdown(!showDropdown)
     }
     return (
-        <div className='border-b-[1px] border-b-slate-400 py-2 bg-[#082567] '>
-            <div className='flex justify-between container mx-auto items-center'>
+        <div className='border-b-[1px] border-b-slate-400 h-12 bg-primary '>
+            <div className='flex justify-between container mx-auto items-center h-full'>
                 <div className=''>
                     <div className='flex gap-1 items-center'>
                         <LuGraduationCap color='white' size={25} className='font-bold' />
                         <span className='text-white text-2xl font-bold'>Educare</span>
                     </div>
                 </div>
-                <div>
-                    <ul className='flex items-center gap-5'>
-                        <li>
+                <div className='h-full'>
+                    <ul className='flex items-center gap-5 h-full'>
+                        <li className='h-full flex items-center'>
                             <Link to={'/'} className='text-white font-medium'>Home</Link>
                         </li>
-                        <li>
-                            <div className='relative'>
-                                <span onMouseEnter={handleShowDropdown} onMouseLeave={handleShowDropdown} className='flex gap-1 items-center hover:cursor-pointer'>
+                        <li className='h-full flex items-center'>
+                            <div className='relative h-full'>
+                                <span onMouseEnter={handleShowDropdown} onMouseLeave={handleShowDropdown} className='flex gap-1 items-center hover:cursor-pointer h-full'>
                                     <Link to={'/'} className='text-white font-medium'>Institute Info</Link>
-                                    <MdKeyboardArrowDown color='white' size={25} className='font-bold' />
+                                    <MdKeyboardArrowDown color='white' size={22} className='font-bold mt-1' />
+                                    {showDropdown && <ul className="absolute left-0 top-[47px] w-[150px] border border-gray-200 bg-primary shadow-xl">
+                                        <li className="border-b border-gray-200">
+                                            <Link
+                                                to="#"
+                                                className="block w-full px-3 py-2 text-white font-medium  hover:bg-[#103B99] transition-colors duration-200"
+                                            >
+                                                All List
+                                            </Link>
+                                        </li>
+                                        <li className="border-b border-gray-200">
+                                            <Link
+                                                to="#"
+                                                className="block w-full px-3 py-2 text-white font-medium transition-colors hover:bg-[#103B99] duration-200"
+                                            >
+                                                Administration
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                to="/details"
+                                                className="block w-full px-3 py-2 text-white font-medium hover:bg-[#103B99] transition-colors duration-200"
+                                            >
+                                                Institute Details
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                    }
                                 </span>
 
-                                <ul className='absolute left-0 top-8 bg-white rounded-lg p-4'>
-                                    <li className='flex flex-col text-gray-950'>
-                                        <Link to={'#'} className='font-medium'>All List</Link>
-                                        <Link to={'#'} className='font-medium'>Administration</Link>
-                                        <Link to={'#'} className='font-medium'>Institute details</Link>
-                                    </li>
-                                </ul>
+
                             </div>
 
 
