@@ -5,3 +5,20 @@
     --color-secondary: #103B99;
     --color-accent: #F5B700;
 }
+
+
+/* for corousel */
+.embla {
+    overflow: hidden;
+}
+
+.embla__container {
+    display: flex;
+}
+
+.embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+}
+
+/* for corousel end*/

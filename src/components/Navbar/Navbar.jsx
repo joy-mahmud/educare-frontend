@@ -13,7 +13,6 @@ const Navbar = () => {
     const handleHideDropdown = () => {
         setActiveMenu(null)
     }
-    console.log(location.pathname)
 
     const menus = [
         { name: 'Home', path: '/' },
@@ -104,7 +103,7 @@ const Navbar = () => {
                                                 <span onMouseEnter={() => handleShowDropdown(menu.name)} onMouseLeave={handleHideDropdown} className={`px-2 flex gap-1 items-center hover:cursor-pointer h-full hover:bg-secondary ${menu.routes?.includes(location.pathname) ? 'bg-secondary' : ''}`}>
                                                     <span className='text-white font-normal'>{menu.name}</span>
                                                     <MdKeyboardArrowDown color='white' size={22} className='font-bold mt-1' />
-                                                    <ul style={{ width: menu.dropdownWidth }} className={`absolute left-0 top-[47px] min-w-[150px] border-[0.5px] border-gray-500 bg-primary shadow-xl transition-all duration-500 ease-in-out transform ${activeMenu === menu.name ? 'opacity-100 visible translat-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                                                    <ul style={{ width: menu.dropdownWidth }} className={`absolute left-0 top-[47px] min-w-[150px] border-[0.5px] border-gray-500 bg-primary shadow-xl transition-all duration-500 ease-in-out transform z-50 ${activeMenu === menu.name ? 'opacity-100 visible translat-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                                                         {
                                                             menu.subMenu.map((submenu, id) => (
                                                                 <li key={id} className="border-b-[0.5px] border-gray-500">
@@ -138,8 +137,9 @@ const Navbar = () => {
                     </div>
                 </div>
             </div >
-            <div className='bg-primary h-[35px]'>
-                <div className='bg-gray-700 w-[80px] h-[35px] text-white flex items-center justify-center'>news</div>
+            <div className='bg-primary h-[35px] flex'>
+                <span className='bg-gray-700 w-[80px] h-[35px] text-white flex items-center justify-center'>News</span>
+                <marquee behavior="" direction="" className="text-white mt-1">Students are requsted to pay their exam fees | ahdkdldk</marquee>
             </div>
         </div>
     )
