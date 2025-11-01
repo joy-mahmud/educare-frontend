@@ -4,6 +4,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'
 import logo1 from '../../assets/logos/educational-institute-logo-1.png'
 import logo2 from '../../assets/logos/educations-institute-logo-2.webp'
+import { IoIosArrowForward } from 'react-icons/io'
 const Navbar = () => {
     const [activeMenu, setActiveMenu] = useState(null)
     const location = useLocation()
@@ -15,64 +16,88 @@ const Navbar = () => {
     }
 
     const menus = [
-        { name: 'Home', path: '/' },
+
+        { name: 'হোম', path: '/' },
         {
-            name: 'About Us',
+            name: 'আমাদের কথা',
             routes: ['/institute-details', '/institute-info'],
             subMenu: [
-                { name: 'Institution Info', path: '/institute-info' },
-                { name: 'Governing Body', path: '#' },
-                { name: 'Institute Details', path: '/institute-details' },
+                { name: 'প্রতিষ্ঠানের ইতিহাস ', path: '/institute-info' },
+                { name: 'গভর্নিং বডি', path: '#' },
             ],
-            dropdownWidth: "150px"
+            dropdownWidth: "160px"
         },
         {
-            name: 'Teacher Info',
+            name: 'শিক্ষকদের তথ্য',
             subMenu: [
-                { name: 'Head Info', path: '/details' },
-                { name: 'Teacher Info', path: '#' },
+                { name: 'প্রধান শিক্ষক ', path: '/details' },
+                { name: 'প্রাক্তন প্রধান শিক্ষকগণ', path: '#' },
+                { name: 'শিক্ষকগণ', path: '#' },
             ],
-            dropdownWidth: "150px"
+            dropdownWidth: "190px"
         },
-        { name: 'Staff Info', path: '#' },
+        { name: 'স্টাফদের তথ্য', path: '#' },
         {
-            name: 'Student Info',
+            name: 'শিক্ষার্থীদের তথ্য',
             routes: ['/student-info', '/student-summary'],
             subMenu: [
-                { name: 'Student Info', path: '/student-info' },
-                { name: 'Student Summary', path: '/student-summary' },
+                { name: 'শিক্ষার্থীদের তথ্য', path: '/student-info' },
+                { name: 'শিক্ষার্থীদের সারসংক্ষেপ', path: '/student-summary' },
             ],
-            dropdownWidth: "170px"
+            dropdownWidth: "190px"
         },
         {
-            name: 'Academic Info',
+            name: 'পরীক্ষা',
             subMenu: [
-                { name: 'Curriculum', path: '#' },
-                { name: 'Class Routine', path: '#' },
-                { name: 'Examination Routine', path: '#' },
-                { name: 'Academic Subject', path: '#' },
+                { name: 'কুইজ', path: '/student-summary' },
+                { name: 'কুইজের ফলাফল', path: '/student-summary' },
+                { name: 'বহুনির্বাচনী পরীক্ষা', path: '/details' },
+                { name: 'বহুনির্বাচনী পরীক্ষার ফলাফল', path: '/details' },
+                { name: 'রচনামূলক পরীক্ষা', path: '/details' },
+                { name: 'রচনামূলক পরীক্ষার ফলাফল', path: '/details' },
+            ],
+            dropdownWidth: "225px"
+        },
+        {
+            name: 'একাডেমিক তথ্য',
+            subMenu: [
+                { name: 'পাঠ্যক্রম', path: '#' },
+                { name: 'ক্লাস রুটিন', path: '#' },
+                { name: 'পরীক্ষার রুটিন', path: '#' },
+                { name: 'একাডেমিক সাবজেক্ট', path: '#' },
+                { name: 'সায়েন্স ক্লাব', path: '#' },
+                { name: 'আইসিটি ক্লাব', path: '#' },
             ],
             dropdownWidth: "180px"
         },
         {
-            name: 'Publications',
+            name: 'প্রকাশনা ',
             subMenu: [
-                { name: 'Magazine', path: '#' },
-                { name: 'Album', path: '#' },
+                { name: 'ম্যাগাজিন', path: '#' },
+                { name: 'অ্যালবাম', path: '#' },
             ],
             dropdownWidth: "150px"
         },
         {
-            name: 'Gallery',
+            name: 'গ্যালারি',
             subMenu: [
-                { name: 'Photo Gallery', path: '#' },
-                { name: 'Video Gallery', path: '#' },
+                { name: 'ফটো গ্যালারি', path: '#' },
+                { name: 'ভিডিও গ্যালারি', path: '#' },
             ],
             dropdownWidth: "150px"
         },
-        { name: 'Golden Jubilee Corner', path: '#' },
-        { name: 'Admission', path: '#' },
-        { name: 'Payment', path: '#' },
+        { name: 'সুবর্ণজয়ন্তী কর্ণার', path: '#' },
+        { name: 'ভর্তি ফর্ম', path: '#' },
+        { name: 'পেমেন্ট', path: '#' },
+
+        // { 
+        //     name: 'লগইন', 
+        //     subMenu: [
+        //         { name: 'শিক্ষক লগইন', path: '#' },
+        //         { name: 'শিক্ষার্থী লগইন', path: '#' },
+        //     ],     
+        // },
+
     ]
 
     return (
@@ -101,7 +126,7 @@ const Navbar = () => {
                                         <li key={index} className='h-full flex items-center border-r-[0.5px] border-gray-500'>
                                             <div className='relative h-full'>
                                                 <span onMouseEnter={() => handleShowDropdown(menu.name)} onMouseLeave={handleHideDropdown} className={`px-2 flex gap-1 items-center hover:cursor-pointer h-full hover:bg-secondary ${menu.routes?.includes(location.pathname) ? 'bg-secondary' : ''}`}>
-                                                    <span className='text-white font-normal'>{menu.name}</span>
+                                                    <span className='text-white font-normal text-[14px]'>{menu.name}</span>
                                                     <MdKeyboardArrowDown color='white' size={22} className='font-bold mt-1' />
                                                     <ul style={{ width: menu.dropdownWidth }} className={`absolute left-0 top-[47px] min-w-[150px] border-[0.5px] border-gray-500 bg-primary shadow-xl transition-all duration-500 ease-in-out transform z-50 ${activeMenu === menu.name ? 'opacity-100 visible translat-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                                                         {
@@ -109,7 +134,7 @@ const Navbar = () => {
                                                                 <li key={id} className="border-b-[0.5px] border-gray-500">
                                                                     <Link
                                                                         to={submenu.path}
-                                                                        className="block w-full px-3 py-2 text-white font-normal  hover:bg-secondary transition-colors duration-200"
+                                                                        className="block w-full px-3 py-2 text-white text-[14px] font-normal  hover:bg-secondary transition-colors duration-200"
                                                                     >
                                                                         {submenu.name}
                                                                     </Link>
@@ -127,7 +152,7 @@ const Navbar = () => {
 
                                         </li>
                                     ) : (<li key={index} className={`h-full px-2 border-r-[0.5px] border-gray-500 flex items-center hover:bg-secondary ${location.pathname === menu.path ? 'bg-secondary' : ''}`}>
-                                        <Link to={menu.path} className='text-white font-normal'>
+                                        <Link to={menu.path} className='text-white font-normal text-[14px]'>
                                             {menu.name}</Link>
                                     </li>)
 
@@ -138,8 +163,8 @@ const Navbar = () => {
                 </div>
             </div >
             <div className='bg-primary h-[35px] flex'>
-                <span className='bg-gray-700 w-[80px] h-[35px] text-white flex items-center justify-center'>News</span>
-                <marquee behavior="" direction="" className="text-white mt-1">Students are requsted to pay their exam fees | ahdkdldk</marquee>
+                <span className='bg-gray-700 w-[135px] h-[35px] text-white flex items-center justify-center gap-2 text-[14px]'>ব্রেকিং নিউজ    <span><IoIosArrowForward color='white' size={20} /></span></span>
+                <marquee behavior="" direction="" className="text-white mt-1 text-[14px]"> আগামী ২৫ নভেম্বর ২০২৫ থেকে বিদ্যালয়ের বার্ষিক পরীক্ষা শুরু হবে   --||--   রুটিন ওয়েবসাইটে প্রকাশ করা হয়েছে  --||-- ২০২৬ শিক্ষাবর্ষের ভর্তি কার্যক্রম আগামী ১ ডিসেম্বর ২০২৫ থেকে শুরু হবে   --||--   ২০২৫ সালের দ্বিতীয় টার্মের ফলাফল আগামী ২০ নভেম্বর বিদ্যালয়ের ওয়েবসাইটে প্রকাশ করা হবে। </marquee>
             </div>
         </div>
     )
