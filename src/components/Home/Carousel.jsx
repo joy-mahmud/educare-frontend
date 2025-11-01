@@ -17,7 +17,7 @@ const Carousel = () => {
                 {
                     carouselSlides.map((slide, index) => (
                         <div className="embla__slide rounded-xl">
-                            <img src={slide.image} alt={`image${index}`} className='h-[400px] w-full rounded-xl' />
+                            <img src={slide.image} alt={`image${index}`} className='w-full h-[450px] rounded-xl' />
                         </div>
                     ))
                 }

@@ -9,7 +9,7 @@ const Home = () => {
                 <div className='w-[70%]'>
                     <Carousel />
                 </div>
-                <div className='w-[30%] h-[400px]'>
+                <div className='w-[30%] h-[450px]'>
                     <NoticeBoard />
                 </div>
 
