@@ -65,12 +65,12 @@ const NoticeBoard = () => {
 
     return (
         <div className='h-full'>
-            <div className='text-white bg-gradient-to-r from-primary to-secondary h-[40px] rounded-t-xl flex gap-1 items-center justify-center'>
+            <div className='text-white bg-gradient-to-r from-primary to-secondary h-[50px] rounded-t-xl flex gap-1 items-center justify-center'>
                 <FaRegBell className='text-xl' />
                 <h3 className='text-xl font-semibold'>Notice Board</h3>
             </div>
 
-            <div className='border border-gray-400 border-t-0 h-[410px] rounded-b-xl p-2 flex flex-col gap-3 justify-between items-center'>
+            <div className='border border-gray-400 border-t-0 h-[400px] rounded-b-xl p-2 flex flex-col gap-3 justify-between items-center'>
                 <div className='flex flex-col gap-2 w-full overflow-y-auto'>
                     {
                         notices.map((notice, id) => (

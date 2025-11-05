@@ -3,6 +3,7 @@ import Carousel from '../../components/Home/Carousel'
 import NoticeBoard from '../../components/Home/NoticeBoard'
 import PriciplesVoice from '../../components/Home/PriciplesVoice'
 import ImportantLinks from '../../components/Home/ImportantLinks'
+import Gallary from '../../components/Home/Gallary'
 
 const Home = () => {
     return (
@@ -11,14 +12,17 @@ const Home = () => {
                 <div className='w-[70%]'>
                     <Carousel />
                 </div>
-                <div className='w-[30%] h-[450px]'>
+                <div className='w-[30%]'>
                     <NoticeBoard />
                 </div>
 
             </section>
-            <section className='mt-14 flex gap-5'>
+            <section className='mt-10 flex gap-5'>
                 <PriciplesVoice />
                 <ImportantLinks />
+            </section>
+            <section className='mt-10'>
+                <Gallary />
             </section>
         </div>
     )
