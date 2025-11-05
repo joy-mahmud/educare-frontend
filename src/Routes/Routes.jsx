@@ -3,6 +3,7 @@ import {
 } from "react-router-dom";
 import Root from "../Layout/Root/Root";
 import Home from "../Pages/Home/Home";
+import SingleNotice from "../Pages/Notice/SingleNotice";
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
                 element: <div>student-summary</div>
 
             },
+            {
+                path: '/notice/:id',
+                element: <SingleNotice />
+            }
         ]
     }
 ]);
