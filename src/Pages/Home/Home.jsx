@@ -4,6 +4,7 @@ import NoticeBoard from '../../components/Home/NoticeBoard'
 import PriciplesVoice from '../../components/Home/PriciplesVoice'
 import ImportantLinks from '../../components/Home/ImportantLinks'
 import Gallary from '../../components/Home/Gallary'
+import ContactUs from '../../components/Home/ContactUs'
 
 const Home = () => {
     return (
@@ -23,6 +24,9 @@ const Home = () => {
             </section>
             <section className='mt-10'>
                 <Gallary />
+            </section>
+            <section className='mt-10'>
+                <ContactUs />
             </section>
         </div>
     )
