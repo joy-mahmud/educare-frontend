@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CiCalendar } from 'react-icons/ci'
 import { FaRegBell } from 'react-icons/fa'
-import { truncateTextWithEllipses } from '../../utils/truncateTextWithEllipses'
+import { truncateTextWithEllipses } from '../../utils/helpers/truncateTextWithEllipses'
 import { Link } from 'react-router-dom'
 
 

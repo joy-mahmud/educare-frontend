@@ -5,12 +5,13 @@ import PriciplesVoice from '../../components/Home/PriciplesVoice'
 import ImportantLinks from '../../components/Home/ImportantLinks'
 import Gallary from '../../components/Home/Gallary'
 import ContactUs from '../../components/Home/ContactUs'
+import Footer from '../../components/Footer/Footer'
 
 const Home = () => {
     return (
         <div className='container mx-auto mt-5 mb-10'>
-            <section className='flex gap-5'>
-                <div className='w-[70%]'>
+            <section className='flex gap-5 items-start'>
+                <div className='w-[69%]'>
                     <Carousel />
                 </div>
                 <div className='w-[30%]'>
@@ -27,6 +28,9 @@ const Home = () => {
             </section>
             <section className='mt-10'>
                 <ContactUs />
+            </section>
+            <section className='mt-10'>
+                <Footer />
             </section>
         </div>
     )

@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom'
 import logo1 from '../../assets/logos/educational-institute-logo-1.png'
 import logo2 from '../../assets/logos/educations-institute-logo-2.webp'
 import { IoIosArrowForward } from 'react-icons/io'
+import { INSTITUTE_NAME_BN, INSTITUTE_NAME_EN } from '../../utils/constants/constants'
 const Navbar = () => {
     const [activeMenu, setActiveMenu] = useState(null)
     const location = useLocation()
@@ -108,8 +109,8 @@ const Navbar = () => {
                 </div>
 
                 <div className='flex flex-col gap-3 items-center'>
-                    <h2 className='text-white text-3xl font-semibold'>Our Educational Institute</h2>
-                    <h2 className='text-white text-2xl font-semibold'>আমাদের শিক্ষা প্রতিষ্ঠান</h2>
+                    <h2 className='text-white text-3xl font-semibold'>{INSTITUTE_NAME_EN}</h2>
+                    <h2 className='text-white text-2xl font-semibold'>{INSTITUTE_NAME_BN}</h2>
 
                 </div>
                 <img src={logo2} alt='logo2' className='h-[100px] w-[100px]' />

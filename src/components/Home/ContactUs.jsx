@@ -5,7 +5,7 @@ import { IoCallOutline, IoMailUnreadOutline } from 'react-icons/io5'
 
 const ContactUs = () => {
     return (
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto">
             {/* ===== Header Section ===== */}
             <div className="relative bg-gradient-to-r from-primary to-secondary rounded-lg mb-8 py-5 overflow-hidden">
                 {/* Decorative circles */}
@@ -76,8 +76,10 @@ const ContactUs = () => {
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
+
                 </div>
             </div>
+
         </div>
     )
 }
