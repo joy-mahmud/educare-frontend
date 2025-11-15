@@ -6,6 +6,7 @@ import ImportantLinks from '../../components/Home/ImportantLinks'
 import Gallary from '../../components/Home/Gallary'
 import ContactUs from '../../components/Home/ContactUs'
 import Footer from '../../components/Footer/Footer'
+import Demo from '../../components/Home/demo'
 
 const Home = () => {
     return (
@@ -32,6 +33,7 @@ const Home = () => {
             <section className='mt-10'>
                 <Footer />
             </section>
+            <Demo />
         </div>
     )
 }
