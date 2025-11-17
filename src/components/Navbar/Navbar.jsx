@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
-import { LuGraduationCap, LuMenu } from 'react-icons/lu'
+import { LuMenu } from 'react-icons/lu'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'
 import logo1 from '../../assets/logos/educational-institute-logo-1.png'
 import logo2 from '../../assets/logos/educations-institute-logo-2.webp'
 import { IoIosArrowForward } from 'react-icons/io'
 import { INSTITUTE_NAME_BN, INSTITUTE_NAME_EN } from '../../utils/constants/constants'
+import { IoClose } from 'react-icons/io5'
 const Navbar = () => {
     const [activeMenu, setActiveMenu] = useState(null)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [activeMobileSubmenu, setActiveMobileSubmenu] = useState(null)
     const location = useLocation()
     const handleShowDropdown = (menu) => {
         setActiveMenu(menu)
@@ -100,6 +103,19 @@ const Navbar = () => {
         // },
 
     ]
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen)
+        setActiveMobileSubmenu(null)
+    }
+
+    const toggleMobileSubmenu = (menuName) => {
+        setActiveMobileSubmenu(activeMobileSubmenu === menuName ? null : menuName)
+    }
+
+    const handleLinkClick = () => {
+        setIsMobileMenuOpen(false)
+        setActiveMobileSubmenu(null)
+    }
 
     return (
         <div className='container mx-auto'>
@@ -168,9 +184,76 @@ const Navbar = () => {
             <div className='border-b-[1px] border-b-slate-500 h-10 bg-primary block lg:hidden text-white'>
                 <div className='flex justify-between items-center px-5 h-full'>
                     <p className='text-[16px] font-medium '>মেনু</p>
-                    <LuMenu className='text-2xl' />
+
+                    <button onClick={toggleMobileMenu}>
+                        <LuMenu className='text-2xl hover:cursor-pointer' />
+                    </button>
                 </div>
             </div>
+            <div className={`fixed top-0 right-0 h-full w-[280px] bg-primary shadow-2xl transform transition-transform duration-300 ease-in-out z-50 lg:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className='flex justify-between items-center p-4 border-b border-gray-500'>
+                    <span className='text-white font-semibold text-lg'>মেনু</span>
+                    <button
+                        onClick={toggleMobileMenu}
+                        className='text-white p-2 hover:bg-secondary rounded transition-colors hover:cursor-pointer'
+                    >
+                        <IoClose size={24} />
+                    </button>
+                </div>
+                <div className='overflow-y-auto h-[calc(100%-64px)]'>
+                    <ul className='flex flex-col'>
+                        {menus.map((menu, index) => (
+                            <li key={index} className='border-b border-gray-500'>
+                                {
+                                    menu.subMenu ? (
+                                        <div>
+                                            <button
+                                                onClick={() => toggleMobileSubmenu(menu.name)}
+                                                className={`w-full px-4 py-3 text-left text-white text-sm font-normal hover:bg-secondary flex gap-2 justify-between items-center hover:cursor-pointer ${menu.routes?.includes(location.pathname) ? 'bg-secondary' : ''}`}>
+                                                <span>{menu.name}</span>
+                                                <MdKeyboardArrowDown
+                                                    size={20}
+                                                    className={`trnsform transition-transform duration-300 ${activeMobileSubmenu === menu.name ? 'rotate-180' : ''}`}
+                                                />
+                                            </button>
+                                            <ul
+                                                className={`bg-gray-800 overflow-hidden transition-all duration-300 ${activeMobileSubmenu === menu.name ? "max-h-[500px]" : "max-h-0"}`}
+                                            >
+                                                {menu.subMenu.map((submenu, id) => (
+                                                    <li
+                                                        key={id}
+                                                        className='border-b border-gray-700 last:border-b-0 hover:cursor-pointer'
+                                                    >
+                                                        <Link
+                                                            onClick={handleLinkClick}
+                                                            className='block px-6 py-3 text-white text-sm hover:bg-secondary transition-colors'
+                                                        >
+                                                            {submenu.name}
+                                                        </Link>
+                                                    </li>
+                                                ))}
+
+                                            </ul>
+                                        </div>
+                                    ) : (
+                                        <Link to={menu.path}
+                                            onClick={handleLinkClick}
+                                            className={`block px-4 py-3 text-white text-sm font-normal hover:bg-secondary transition-colors ${location.pathname === menu.path ? 'bg-secondary' : ''}`}
+                                        >
+                                            {menu.name}
+                                        </Link>
+                                    )
+                                }
+                            </li>
+                        ))}
+
+                    </ul>
+                </div>
+            </div>
+            {isMobileMenuOpen && (
+                <div onClick={toggleMobileMenu} className='fixed inset-0 bg-black z-40 lg:hidden'></div>
+            )}
+
             <div className='bg-primary h-[35px] flex'>
                 <span className='bg-gray-700 w-[135px] h-[35px] text-white flex items-center justify-center gap-2 text-[14px]'>ব্রেকিং নিউজ    <span><IoIosArrowForward color='white' size={20} /></span></span>
                 <marquee behavior="" direction="" className="text-white mt-1 text-[14px]"> আগামী ২৫ নভেম্বর ২০২৫ থেকে বিদ্যালয়ের বার্ষিক পরীক্ষা শুরু হবে   --||--   রুটিন ওয়েবসাইটে প্রকাশ করা হয়েছে  --||-- ২০২৬ শিক্ষাবর্ষের ভর্তি কার্যক্রম আগামী ১ ডিসেম্বর ২০২৫ থেকে শুরু হবে   --||--   ২০২৫ সালের দ্বিতীয় টার্মের ফলাফল আগামী ২০ নভেম্বর বিদ্যালয়ের ওয়েবসাইটে প্রকাশ করা হবে। </marquee>

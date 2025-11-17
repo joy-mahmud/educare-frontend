@@ -28,10 +28,10 @@ const Carousel = () => {
         <div className=' relative'>
 
             {/* Navigation buttons */}
-            <div className='absolute top-1/2 z-50 left-5'>
+            <div className='absolute top-1/2 z-30 left-5'>
                 <IoIosArrowBack className='swiper-button-prev cursor-pointer text-2xl text-white' />
             </div>
-            <div className='absolute top-1/2 z-50 right-5'>
+            <div className='absolute top-1/2 z-30 right-5'>
                 <IoIosArrowForward className='swiper-button-next cursor-pointer text-2xl text-white' />
             </div>
             <Swiper
