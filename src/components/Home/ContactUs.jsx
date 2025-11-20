@@ -20,18 +20,18 @@ const ContactUs = () => {
             </div>
 
             {/* ===== Contact Info Section ===== */}
-            <div className='flex gap-5'>
+            <div className='flex flex-col md:flex-row gap-3 lg:gap-5'>
                 <div className="shadow-xl rounded-lg border border-gray-300 py-8 flex-1">
-                    <h2 className="text-center font-bold text-3xl text-gray-800 mb-10">Get In Touch</h2>
+                    <h2 className="text-center font-bold text-2xl lg:text-3xl text-gray-800 mb-10">Get In Touch</h2>
 
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid [@media(min-width:0px)_and_(max-width:424px)]:grid-cols-1 grid-cols-3 gap-5 sm:gap-2">
                         {/* Visit Us */}
                         <div className="flex flex-col gap-2 items-center text-center">
-                            <div className="bg-primary h-[70px] w-[70px] rounded-full flex justify-center items-center">
+                            <div className="bg-primary h-[60px] w-[60px] lg:h-[70px] lg:w-[70px] rounded-full flex justify-center items-center">
                                 <GrLocation className="text-white h-[30px] w-[30px]" />
                             </div>
-                            <h2 className="text-2xl font-bold text-gray-800 mt-3">Visit Us</h2>
-                            <div className="text-gray-700">
+                            <h2 className="text-[20px] lg:text-2xl font-bold text-gray-800 mt-3">Visit Us</h2>
+                            <div className="text-gray-700 text-[12px] lg:text-[16px]">
                                 <p>12/50 Section B</p>
                                 <p>Mirpur 10</p>
                                 <p>Dhaka-1216</p>
@@ -40,11 +40,11 @@ const ContactUs = () => {
 
                         {/* Call Us */}
                         <div className="flex flex-col gap-2 items-center text-center">
-                            <div className="bg-secondary h-[70px] w-[70px] rounded-full flex justify-center items-center">
+                            <div className="bg-secondary h-[60px] w-[60px] lg:h-[70px] lg:w-[70px] rounded-full flex justify-center items-center">
                                 <IoCallOutline className="text-white h-[30px] w-[30px]" />
                             </div>
-                            <h2 className="text-2xl font-bold text-gray-800 mt-3">Call Us</h2>
-                            <div className="text-gray-700">
+                            <h2 className="text-[20px] lg:text-2xl font-bold text-gray-800 mt-3">Call Us</h2>
+                            <div className="text-gray-700 text-[12px] lg:text-[16px]">
                                 <p>+88015622662</p>
                                 <p>+88036373535</p>
                                 <p>Sun–Thu: 9:00 AM – 5:00 PM</p>
@@ -53,11 +53,11 @@ const ContactUs = () => {
 
                         {/* Email Us */}
                         <div className="flex flex-col gap-2 items-center text-center">
-                            <div className="bg-primary h-[70px] w-[70px] rounded-full flex justify-center items-center">
+                            <div className="bg-primary h-[60px] w-[60px] lg:h-[70px] lg:w-[70px] rounded-full flex justify-center items-center">
                                 <IoMailUnreadOutline className="text-white h-[30px] w-[30px]" />
                             </div>
-                            <h2 className="text-2xl font-bold text-gray-800 mt-3">Email Us</h2>
-                            <div className="text-gray-700">
+                            <h2 className="text-[20px] lg:text-2xl font-bold text-gray-800 mt-3">Email Us</h2>
+                            <div className="text-gray-700 text-[12px] lg:text-[16px]">
                                 <p>info@institute.com</p>
                                 <p>admission@institute.com</p>
                                 <p>support@institute.com</p>
@@ -65,16 +65,16 @@ const ContactUs = () => {
                         </div>
                     </div>
                 </div>
-                <div className="rounded-lg overflow-hidden shadow-xl border border-gray-300 w-[30%]">
+                <div className="rounded-lg overflow-hidden shadow-xl border border-gray-300 w-full md:w-[30%]">
                     <iframe
                         title="Google Map Location"
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.690637479571!2d90.36542037511222!3d23.759358288386747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bf53b2a1e2fb%3A0xf48f78e01a6f5321!2sMirpur%2010%2C%20Dhaka%201216!5e0!3m2!1sen!2sbd!4v1707068447471!5m2!1sen!2sbd"
                         width="100%"
-                        height="350"
                         style={{ border: 0 }}
                         allowFullScreen=""
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
+                        className='h-full'
                     ></iframe>
 
                 </div>

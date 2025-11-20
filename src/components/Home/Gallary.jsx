@@ -60,6 +60,26 @@ const Gallary = () => {
                     className='mySwiper'
                     grabCursor={true}
                     freeMode={true}
+                    breakpoints={{
+                        0: {
+                            slidesPerView: 1, // for very small screens (320px to 374px)
+                        },
+                        375: {
+                            slidesPerView: 1, // iPhone SE / small phones
+                        },
+                        425: {
+                            slidesPerView: 2, // general small phones
+                        },
+                        640: {
+                            slidesPerView: 2, // tablets (small)
+                        },
+                        768: {
+                            slidesPerView: 3, // tablets (medium)
+                        },
+                        1024: {
+                            slidesPerView: 4, // laptops
+                        },
+                    }}
 
                 >
 
@@ -69,7 +89,7 @@ const Gallary = () => {
                                 <img onClick={() => {
                                     setOpenLightBox(true)
                                     setPhotoIndex(id)
-                                }} src={item.img} alt={item.title} className='h-[225px] rounded-lg hover:scale-105 duration-300 transition-transform' />
+                                }} src={item.img} alt={item.title} className='w-full h-[225px] rounded-lg hover:scale-105 duration-300 transition-transform' />
                             </SwiperSlide>
                         ))
                     }

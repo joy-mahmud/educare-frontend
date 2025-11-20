@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const ImportantLinks = () => {
     return (
-        <div className='w-[300px]'>
+        <div className='w-full md:w-[300px]'>
             <div className='text-white bg-gradient-to-r from-primary to-secondary rounded-t-xl px-2 py-3'>
                 <h2 className='text-center text-xl font-semibold'>Important Links</h2>
             </div>

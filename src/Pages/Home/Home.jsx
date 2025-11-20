@@ -11,16 +11,16 @@ import Demo from '../../components/Home/demo'
 const Home = () => {
     return (
         <div className='container mx-auto mt-5 mb-10'>
-            <section className='flex gap-5 items-start'>
-                <div className='w-[69%]'>
+            <section className='flex flex-col md:flex-row gap-3 lg:gap-5 items-start'>
+                <div className='w-full md:w-[60%] lg:w-[64%]'>
                     <Carousel />
                 </div>
-                <div className='w-[30%]'>
+                <div className='w-full md:w-[39%] lg:w-[35%]'>
                     <NoticeBoard />
                 </div>
 
             </section>
-            <section className='mt-10 flex gap-5'>
+            <section className='mt-10 flex flex-col md:flex-row gap-5'>
                 <PriciplesVoice />
                 <ImportantLinks />
             </section>
@@ -33,7 +33,7 @@ const Home = () => {
             <section className='mt-10'>
                 <Footer />
             </section>
-            <Demo />
+            {/* <Demo /> */}
         </div>
     )
 }

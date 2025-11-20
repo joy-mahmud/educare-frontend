@@ -77,11 +77,11 @@ const NoticeBoard = () => {
                             <div key={id} className='border border-gray-300 shadow-md rounded-lg px-2 py-1 hover:cursor-pointer'>
                                 <Link to={`/notice/${notice.id}`}>
                                     <div className='flex gap-3 items-center'>
-                                        <h3 className='text-[18px] font-semibold '>{truncateTextWithEllipses(notice.title, 20)}</h3>
-                                        <span className='flex gap-1 items-center text-xs'><CiCalendar size={16} /> <p className='text-gray-600 text-sm'>{notice.date}</p></span>
+                                        <h3 className='sm:text-xl md:text-[14px] lg:text-[16px] xl:text-[18px] font-semibold '>{truncateTextWithEllipses(notice.title, 20)}</h3>
+                                        <span className='flex gap-1 items-center text-xs'><CiCalendar size={16} /> <p className='text-gray-600 text-sm  md:text-xs lg:text-sm'>{notice.date}</p></span>
 
                                     </div>
-                                    <p className='text-sm text-gray-600 font-normal'>{truncateTextWithEllipses(notice.description, 48)}</p>
+                                    <p className='text-sm md:text-[13px] xl:text-sm text-gray-600 font-normal'>{truncateTextWithEllipses(notice.description, 48)}</p>
                                 </Link>
 
 

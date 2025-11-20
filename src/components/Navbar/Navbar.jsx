@@ -120,8 +120,8 @@ const Navbar = () => {
     return (
         <div className='container mx-auto'>
             <div className='bg-secondary h-[120px] px-5 flex justify-between items-center border-b-[0.5px] border-gray-500'>
-                <div className='bg-white  h-[80px] md:h-[100px] '>
-                    <img src={logo1} alt="logo1" className='h-[80px] md:h-[100px] w-[80px] md:w-[100px]' />
+                <div className='bg-white h-[60px] sm:h-[80px] md:h-[100px] '>
+                    <img src={logo1} alt="logo1" className='h-[60px] sm:h-[80px] md:h-[100px] w-[60px] sm:w-[80px] md:w-[100px]' />
                 </div>
 
                 <div className='flex flex-col gap-1 md:gap-3 items-center'>
@@ -129,7 +129,7 @@ const Navbar = () => {
                     <h2 className='text-white text-[16px] sm:text-xl md:text-2xl font-semibold'>{INSTITUTE_NAME_BN}</h2>
 
                 </div>
-                <img src={logo2} alt='logo2' className='h-[80px] md:h-[100px] w-[80px] md:w-[100px]' />
+                <img src={logo2} alt='logo2' className='h-[60px] sm:h-[80px] md:h-[100px] w-[60px] sm:w-[80px] md:w-[100px]' />
             </div>
             {/* this menu is for laptop screen and above */}
             <div className='border-b-[1px] border-b-slate-500 h-12 bg-primary hidden lg:block'>
@@ -225,6 +225,7 @@ const Navbar = () => {
                                                         className='border-b border-gray-700 last:border-b-0 hover:cursor-pointer'
                                                     >
                                                         <Link
+                                                            to={submenu.path}
                                                             onClick={handleLinkClick}
                                                             className='block px-6 py-3 text-white text-sm hover:bg-secondary transition-colors'
                                                         >

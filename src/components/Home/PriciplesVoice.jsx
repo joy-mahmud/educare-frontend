@@ -10,10 +10,10 @@ const PriciplesVoice = () => {
                     <h2 className='text-xl font-semibold '>প্রধান শিক্ষক মহোদয়ের কথা</h2>
                 </span>
             </div>
-            <div className='border border-t-0 border-gray-300 rounded-b-xl  px-3 py-2 h-[250px]'>
-                <div className='flex gap-5'>
-                    <img src={imgPriciple} alt="priciple img" className='h-[228px] w-[228px] rounded-lg' />
-                    <p>   শিক্ষা এগিয়ে চলে দুর্বার গতিতে, অজানাকে জানতে, অমৃতের সন্ধানে, সৃজনশীলতার সৃষ্টি-সুখের উল্লাসে, বিন্দু জলে সিন্ধুর গভীরতা খুঁজতে। কমলমতি শিক্ষার্থীদের অদম্য ভাবাবেগ, অনুভূতি, রসবোধ ও সাহিত্য মনোবৃত্তির শুকুমার শিল্প মানস শিক্ষার্থীদের এগিয়ে নিয়ে যাবে দূরে-বহু দূরে সাফল্যের বেদিতে।</p>
+            <div className='border border-t-0 border-gray-300 rounded-b-xl  px-3 py-2 sm:h-[250px]'>
+                <div className='flex flex-col sm:flex-row gap-5'>
+                    <img src={imgPriciple} alt="priciple img" className='w-full h-[180px] sm:h-[150px] sm:w-[150px] lg:h-[228px] lg:w-[228px] rounded-lg' />
+                    <p className='md:text-[13px] lg:text-[16px]'>   শিক্ষা এগিয়ে চলে দুর্বার গতিতে, অজানাকে জানতে, অমৃতের সন্ধানে, সৃজনশীলতার সৃষ্টি-সুখের উল্লাসে, বিন্দু জলে সিন্ধুর গভীরতা খুঁজতে। কমলমতি শিক্ষার্থীদের অদম্য ভাবাবেগ, অনুভূতি, রসবোধ ও সাহিত্য মনোবৃত্তির শুকুমার শিল্প মানস শিক্ষার্থীদের এগিয়ে নিয়ে যাবে দূরে-বহু দূরে সাফল্যের বেদিতে।</p>
                 </div>
             </div>
         </div>
