@@ -4,6 +4,7 @@ import {
 import Root from "../Layout/Root/Root";
 import Home from "../Pages/Home/Home";
 import SingleNotice from "../Pages/Notice/SingleNotice";
+import RegistrationForm from "../Pages/Admission/RegistrationForm";
 
 const router = createBrowserRouter([
     {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 element: <Home />
+            },
+            {
+                path: '/admission',
+                element: <RegistrationForm />
             },
             {
                 path: 'institute-info',
