@@ -24,9 +24,9 @@ const ContactUs = () => {
                 <div className="shadow-xl rounded-lg border border-gray-300 py-8 flex-1">
                     <h2 className="text-center font-bold text-2xl lg:text-3xl text-gray-800 mb-10">Get In Touch</h2>
 
-                    <div className="grid [@media(min-width:0px)_and_(max-width:424px)]:grid-cols-1 grid-cols-3 gap-5 sm:gap-2">
+                    <div className="grid sm:grid-cols-3 grid-cols-1 gap-5 sm:gap-2">
                         {/* Visit Us */}
-                        <div className="flex flex-col gap-2 items-center text-center">
+                        <div className="flex flex-col gap-2 items-center text-center max-[639px]:border max-[639px]:rounded-lg max-[639px]:mx-5 max-[639px]:py-5">
                             <div className="bg-primary h-[60px] w-[60px] lg:h-[70px] lg:w-[70px] rounded-full flex justify-center items-center">
                                 <GrLocation className="text-white h-[30px] w-[30px]" />
                             </div>
@@ -39,7 +39,7 @@ const ContactUs = () => {
                         </div>
 
                         {/* Call Us */}
-                        <div className="flex flex-col gap-2 items-center text-center">
+                        <div className="flex flex-col gap-2 items-center text-center max-[639px]:border max-[639px]:rounded-lg max-[639px]:mx-5 max-[639px]:py-5">
                             <div className="bg-secondary h-[60px] w-[60px] lg:h-[70px] lg:w-[70px] rounded-full flex justify-center items-center">
                                 <IoCallOutline className="text-white h-[30px] w-[30px]" />
                             </div>
@@ -52,7 +52,7 @@ const ContactUs = () => {
                         </div>
 
                         {/* Email Us */}
-                        <div className="flex flex-col gap-2 items-center text-center">
+                        <div className="flex flex-col gap-2 items-center text-center max-[639px]:border max-[639px]:rounded-lg max-[639px]:mx-5 max-[639px]:py-5">
                             <div className="bg-primary h-[60px] w-[60px] lg:h-[70px] lg:w-[70px] rounded-full flex justify-center items-center">
                                 <IoMailUnreadOutline className="text-white h-[30px] w-[30px]" />
                             </div>
