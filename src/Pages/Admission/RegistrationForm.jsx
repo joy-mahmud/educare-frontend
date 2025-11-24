@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { User, Users, Home, Calendar, Phone, Droplet, Book, Award, UserCheck, CheckCircle, XCircle } from 'lucide-react';
+import axios from 'axios';
+import { BASE_URL } from '../../utils/constants/constants';
 
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
@@ -28,28 +30,32 @@ const RegistrationForm = () => {
         });
     };
 
-    const handleSubmit = () => {
-        setSubmitted(true);
-        console.log(formData)
-        setTimeout(() => {
-            setSubmitted(false);
-            setFormData({
-                studentName: '',
-                fatherName: '',
-                motherName: '',
-                presentAddress: '',
-                permanentAddress: '',
-                dateOfBirth: '',
-                mobile: '',
-                gender: '',
-                bloodGroup: '',
-                religion: '',
-                academicYear: '',
-                classCode: '',
-                sectionCode: '',
-                groupCode: ''
-            });
-        }, 3000);
+    const handleSubmit = async () => {
+        event.preventDefault()
+        const res = await axios.post(`${BASE_URL}/api/students/registration/`, formData)
+        if (res.status == 201) {
+            setSubmitted(true)
+        }
+
+        // setTimeout(() => {
+        //     setSubmitted(false);
+        //     setFormData({
+        //         studentName: '',
+        //         fatherName: '',
+        //         motherName: '',
+        //         presentAddress: '',
+        //         permanentAddress: '',
+        //         dateOfBirth: '',
+        //         mobile: '',
+        //         gender: '',
+        //         bloodGroup: '',
+        //         religion: '',
+        //         academicYear: '',
+        //         classCode: '',
+        //         sectionCode: '',
+        //         groupCode: ''
+        //     });
+        // }, 3000);
     };
 
     const handleCancel = () => {
@@ -98,7 +104,7 @@ const RegistrationForm = () => {
                                 <CheckCircle className="w-12 h-12 text-white" />
                             </div>
                             <h2 className="text-3xl font-bold text-green-800 mb-3">Registration Successful!</h2>
-                            <p className="text-green-700 text-lg">Your registration has been submitted successfully. You will receive a confirmation email shortly.</p>
+                            <p className="text-green-700 text-lg">Your registration has been submitted successfull.</p>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -383,7 +389,7 @@ const RegistrationForm = () => {
                             <div className="flex gap-4 pt-4">
                                 <button
                                     onClick={handleCancel}
-                                    className="flex items-center gap-2 px-8 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
+                                    className="hover:cursor-pointer flex items-center gap-2 px-8 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
                                 >
                                     <XCircle className="w-5 h-5" />
                                     Cancel
@@ -391,7 +397,7 @@ const RegistrationForm = () => {
                                 <button
                                     type='submit'
                                     style={{ backgroundColor: '#082567' }}
-                                    className="flex items-center gap-2 px-8 py-3 text-white rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-105"
+                                    className="hover:cursor-pointer flex items-center gap-2 px-8 py-3 text-white rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-105"
                                 >
                                     <CheckCircle className="w-5 h-5" />
                                     Submit
