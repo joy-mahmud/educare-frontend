@@ -91,8 +91,8 @@ const Navbar = () => {
             dropdownWidth: "150px"
         },
         { name: 'সুবর্ণজয়ন্তী কর্ণার', path: '#' },
-        { name: 'ভর্তি ফর্ম', path: '#' },
-        { name: 'পেমেন্ট', path: '#' },
+        { name: 'ভর্তি ফর্ম', path: '/admission' },
+        { name: 'পেমেন্ট', path: '/payment' },
 
         // { 
         //     name: 'লগইন', 
