@@ -85,7 +85,7 @@ const Navbar = () => {
         {
             name: 'গ্যালারি',
             subMenu: [
-                { name: 'ফটো গ্যালারি', path: '#' },
+                { name: 'ফটো গ্যালারি', path: '/photo-gallary' },
                 { name: 'ভিডিও গ্যালারি', path: '#' },
             ],
             dropdownWidth: "150px"

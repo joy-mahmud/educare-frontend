@@ -6,6 +6,7 @@ import Home from "../Pages/Home/Home";
 import SingleNotice from "../Pages/Notice/SingleNotice";
 import RegistrationForm from "../Pages/Admission/RegistrationForm";
 import PaymentPage from "../Pages/payment/PaymentPage";
+import PhotoGallery from "../Pages/Gallary/PhotoGallary";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: '/payment',
                 element: <PaymentPage />
+            },
+            {
+                path: '/photo-gallary',
+                element: <PhotoGallery />
             },
             {
                 path: 'institute-info',

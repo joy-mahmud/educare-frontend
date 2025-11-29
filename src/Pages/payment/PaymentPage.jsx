@@ -3,11 +3,17 @@ import { CreditCard, Smartphone, CheckCircle, Copy, ArrowRight, AlertCircle, Inf
 import bkash from '../../assets/payment-gateway-logos/bakash.png'
 import nagad from '../../assets/payment-gateway-logos/nagad-Logo.webp'
 import rocket from '../../assets/payment-gateway-logos/rocket-logo.png'
+import axios from 'axios';
+import { BASE_URL } from '../../utils/constants/constants';
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 export default function PaymentPage() {
     const [selectedMethod, setSelectedMethod] = useState('');
     const [transactionId, setTransactionId] = useState('');
     const [amount, setAmount] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    // const [sendMoneyPhoneNumber, setSendMoneyPhoneNumber] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -47,18 +53,48 @@ export default function PaymentPage() {
             setTimeout(() => setCopied(false), 2000);
         }
     };
+    const handleSubmit = async () => {
+        const data = {
+            phoneNumber: phoneNumber,
+            amount: amount,
+            transactionId: transactionId,
+            paymentMethod: selectedMethod,
+            status: 'pending'
+        };
 
-    const handleSubmit = () => {
-        if (selectedMethod && transactionId && amount) {
-            setSubmitted(true);
-            setTimeout(() => {
-                setSubmitted(false);
+        try {
+            const res = await axios.post(`${BASE_URL}/api/payment/create/`, data);
+            if (res.status === 201) {
+                setSubmitted(true);
                 setSelectedMethod('');
-                setTransactionId('');
                 setAmount('');
-            }, 4000);
+            }
+
+        }
+        catch (err) {
+
+            // Handle backend 404
+            if (err.response && err.response.status === 404) {
+                Swal.fire({
+                    icon: "error",
+                    title: "You are not registered with this number",
+                    text: "Please enter the number which you used for registration",
+                    confirmButtonColor: "#082567"
+                });
+            }
+            else {
+                // Other errors
+                Swal.fire({
+                    icon: "error",
+                    title: "Something went wrong",
+                    text: "Try again later",
+                    confirmButtonColor: "#082567"
+                });
+            }
         }
     };
+
+
 
     return (
         <div style={{ backgroundColor: '#f8fafc' }} className="min-h-screen p-4 md:p-8">
@@ -97,22 +133,53 @@ export default function PaymentPage() {
                             <p className="text-green-600 text-sm mt-4">
                                 We will verify your payment within 24 hours and send you a confirmation.
                             </p>
+
+                            <button className='bg-green-600 mt-12 text-white rounded-lg px-3 py-2 text-xl font-medium'>
+                                <Link to={'/'}>Ok</Link>
+                            </button>
                         </div>
                     ) : (
                         <div className="space-y-8">
                             {/* Amount Input */}
-                            <div>
+                            <div className=''>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Enter your phone number: <span className="text-red-500">*</span>
+                                </label>
+
+                                <div className="relative mb-2">
+                                    <input
+                                        type="text"
+                                        value={phoneNumber}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            if (/^[0-9]*$/.test(value)) {
+                                                setPhoneNumber(value);
+                                            }
+                                        }}
+                                        className="w-full pl-5 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-lg font-semibold"
+                                        placeholder="Enter your phone number"
+                                    />
+                                    <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        Please enter the phone number which you have used for registration.
+                                    </p>
+                                </div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                                     Payment Amount <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
                                     <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold text-lg">৳</span>
                                     <input
-                                        type="number"
+                                        type="text"
                                         value={amount}
-                                        onChange={(e) => setAmount(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-lg font-semibold"
-                                        placeholder="Enter amount"
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            if (/^[0-9]*$/.test(value)) {
+                                                setAmount(value);
+                                            }
+                                        }}
+                                        className="w-full pl-10 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-lg font-semibold"
+                                        placeholder="Enter phone number which you used for registration"
                                     />
                                 </div>
                             </div>
@@ -230,6 +297,28 @@ export default function PaymentPage() {
                                     </div>
 
                                     {/* Transaction ID Input */}
+                                    {/* <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Enter the number which you have sent money: <span className="text-red-500">*</span>
+                                    </label>
+
+                                    <div className="relative mb-2">
+                                        <input
+                                            type="text"
+                                            value={sendMoneyPhoneNumber}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^[0-9]*$/.test(value)) {
+                                                    setSendMoneyPhoneNumber(value);
+                                                }
+                                            }}
+                                            className="w-full pl-5 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-lg"
+                                            placeholder="Enter the number which you have sent money"
+                                        />
+                                        <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                                            <AlertCircle className="w-3 h-3" />
+                                            Please enter the phone number from which yoh have sent money.
+                                        </p>
+                                    </div> */}
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                                             Transaction ID / TrxID <span className="text-red-500">*</span>
@@ -238,8 +327,8 @@ export default function PaymentPage() {
                                             <input
                                                 type="text"
                                                 value={transactionId}
-                                                onChange={(e) => setTransactionId(e.target.value)}
-                                                className="w-full px-4 py-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-lg"
+                                                onChange={(e) => setTransactionId(e.target.value.toUpperCase())}
+                                                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-lg"
                                                 placeholder="Enter your transaction ID (e.g., 8G7H6J5K4L)"
                                             />
                                         </div>
