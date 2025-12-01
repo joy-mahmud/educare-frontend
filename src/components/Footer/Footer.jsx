@@ -3,9 +3,9 @@ import logo from '../../assets/logos/educational-institute-logo-1.png'
 import { Link } from 'react-router-dom'
 import { LuCopyright, LuFacebook, LuInstagram, LuLinkedin, LuTwitter } from 'react-icons/lu'
 import { INSTITUTE_NAME_BN, INSTITUTE_NAME_EN } from '../../utils/constants/constants'
+import CopyRight from '../common/CopyRight'
 const Footer = () => {
-    const date = new Date()
-    const year = date.getFullYear()
+
     return (
         <div className='bg-primary py-12 px-20'>
             <div className='flex justify-between gap-5 text-white pb-5'>
@@ -45,7 +45,7 @@ const Footer = () => {
 
             </div>
             <hr className='text-gray-500 mb-5' />
-            <span className='w-full flex justify-center gap-1 text-gray-300 text-xs items-center'><LuCopyright /> <p>{year} {INSTITUTE_NAME_EN}.All rights reserved.</p></span>
+            <CopyRight textColor={'text-white'} />
 
         </div>
     )

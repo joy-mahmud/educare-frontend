@@ -94,13 +94,13 @@ const Navbar = () => {
         { name: 'ভর্তি ফর্ম', path: '/admission' },
         { name: 'পেমেন্ট', path: '/payment' },
 
-        // { 
-        //     name: 'লগইন', 
-        //     subMenu: [
-        //         { name: 'শিক্ষক লগইন', path: '#' },
-        //         { name: 'শিক্ষার্থী লগইন', path: '#' },
-        //     ],     
-        // },
+        {
+            name: 'লগইন',
+            subMenu: [
+                { name: 'শিক্ষক লগইন', path: '/auth' },
+                { name: 'শিক্ষার্থী লগইন', path: '#' },
+            ],
+        },
 
     ]
     const toggleMobileMenu = () => {
@@ -118,7 +118,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className='container mx-auto'>
+        <div className='mx-20'>
             <div className='bg-secondary h-[120px] px-5 flex justify-between items-center border-b-[0.5px] border-gray-500'>
                 <div className='bg-white h-[60px] sm:h-[80px] md:h-[100px] '>
                     <img src={logo1} alt="logo1" className='h-[60px] sm:h-[80px] md:h-[100px] w-[60px] sm:w-[80px] md:w-[100px]' />
