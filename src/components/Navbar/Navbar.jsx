@@ -97,8 +97,8 @@ const Navbar = () => {
         {
             name: 'লগইন',
             subMenu: [
-                { name: 'শিক্ষক লগইন', path: '/auth' },
-                { name: 'শিক্ষার্থী লগইন', path: '#' },
+                { name: 'শিক্ষক লগইন', path: '/teacherLogin' },
+                { name: 'শিক্ষার্থী লগইন', path: '/studentLogin' },
             ],
         },
 
