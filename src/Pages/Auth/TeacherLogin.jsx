@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { User, Mail, Lock, Eye, EyeOff, LogIn, UserPlus, CheckCircle, GraduationCap, Phone, Calendar } from 'lucide-react';
 import CopyRight from '../../components/common/CopyRight';
 
-export default function LoginRegistration() {
+export default function TeacherLogin() {
     const [isLogin, setIsLogin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -16,10 +16,11 @@ export default function LoginRegistration() {
     const [registerData, setRegisterData] = useState({
         fullName: '',
         email: '',
+        techerId: '',
         phone: '',
         dateOfBirth: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
     });
 
     const handleLoginChange = (e) => {
@@ -46,17 +47,7 @@ export default function LoginRegistration() {
 
     const handleRegisterSubmit = () => {
         setSubmitted(true);
-        setTimeout(() => {
-            setSubmitted(false);
-            setRegisterData({
-                fullName: '',
-                email: '',
-                phone: '',
-                dateOfBirth: '',
-                password: '',
-                confirmPassword: ''
-            });
-        }, 3000);
+
     };
 
     return (
@@ -254,6 +245,23 @@ export default function LoginRegistration() {
                                                     type="email"
                                                     name="email"
                                                     value={registerData.email}
+                                                    onChange={handleRegisterChange}
+                                                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
+                                                    placeholder="your.email@example.com"
+                                                />
+                                            </div>
+                                        </div>
+                                        {/* teacher id */}
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                                Teacher Id
+                                            </label>
+                                            <div className="relative">
+                                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                                <input
+                                                    type="text"
+                                                    name="techerId"
+                                                    value={registerData.teacherId}
                                                     onChange={handleRegisterChange}
                                                     className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
                                                     placeholder="your.email@example.com"

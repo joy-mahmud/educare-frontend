@@ -7,7 +7,8 @@ import SingleNotice from "../Pages/Notice/SingleNotice";
 import RegistrationForm from "../Pages/Admission/RegistrationForm";
 import PaymentPage from "../Pages/payment/PaymentPage";
 import PhotoGallery from "../Pages/Gallary/PhotoGallary";
-import LoginRegistration from "../Pages/Auth/LoginRegistration";
+import TeacherLogin from "../Pages/Auth/TeacherLogin";
+import StudentLogin from "../Pages/Auth/StudentLogin";
 
 const router = createBrowserRouter([
     {
@@ -27,8 +28,12 @@ const router = createBrowserRouter([
                 element: <PaymentPage />
             },
             {
-                path: '/auth',
-                element: <LoginRegistration />
+                path: '/teacherLogin',
+                element: <TeacherLogin />
+            },
+            {
+                path: '/studentLogin',
+                element: <StudentLogin />
             },
             {
                 path: '/photo-gallary',
