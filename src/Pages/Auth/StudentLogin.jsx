@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { User, Mail, Lock, Eye, EyeOff, LogIn, UserPlus, CheckCircle, GraduationCap, Phone, Calendar, AlertCircle } from 'lucide-react';
 import CopyRight from '../../components/common/CopyRight';
+import axios from 'axios';
+import { BASE_URL } from '../../utils/constants/constants';
 
 export default function StudentLogin() {
     const [isLogin, setIsLogin] = useState(true);
@@ -42,8 +44,19 @@ export default function StudentLogin() {
         // }, 3000);
     };
 
-    const handlePasswordResetSubmit = () => {
-        setSubmitted(true);
+    const handlePasswordResetSubmit = async() => {
+        const data={
+            phone:newPasswordData.phone,
+            password:newPasswordData.confirmPassword
+        }
+        const res = await axios.post(`${BASE_URL}/api/auth/set-password/`,data)
+        if(res.status === 201){
+            setSubmitted(true);
+            setNewPasswordData({
+                phone: '',
+                password: ''
+            })
+        }
 
     };
 
@@ -77,13 +90,18 @@ export default function StudentLogin() {
                                     <CheckCircle className="w-12 h-12 text-white" />
                                 </div>
                                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
-                                    {isLogin ? 'Login Successful!' : 'Registration Successful!'}
+                                    {isLogin ? 'Login Successful!' : 'new password set successfully'}
                                 </h2>
                                 <p className="text-gray-600">
                                     {isLogin
                                         ? 'Welcome back! Redirecting to dashboard...'
-                                        : 'Account created successfully! Please check your email to verify your account.'}
+                                        : 'You have set a new password, you can now login with this phone number and password'}
                                 </p>
+
+                                <button onClick={()=>{
+                                    setIsLogin(true)
+                                    setSubmitted(false)
+                                    }} className='rounded-lg bg-green-500 px-2 py-1 text-white text-xl font-medium mt-10 hover:cursor-pointer'>OK</button>
                             </div>
                         ) : (
                             <>
@@ -95,7 +113,7 @@ export default function StudentLogin() {
                                             backgroundColor: isLogin ? '#082567' : 'transparent',
                                             color: isLogin ? 'white' : '#4b5563'
                                         }}
-                                        className="flex-1 py-3 rounded-md font-semibold transition-all"
+                                        className="flex-1 py-3 rounded-md font-semibold transition-all hover:cursor-pointer"
                                     >
                                         Login
                                     </button>
@@ -105,7 +123,7 @@ export default function StudentLogin() {
                                             backgroundColor: !isLogin ? '#082567' : 'transparent',
                                             color: !isLogin ? 'white' : '#4b5563'
                                         }}
-                                        className="flex-1 py-3 rounded-md font-semibold transition-all"
+                                        className="flex-1 py-3 rounded-md font-semibold transition-all hover:cursor-pointer"
                                     >
                                         Set New Password
                                     </button>
@@ -289,7 +307,7 @@ export default function StudentLogin() {
                                         <button
                                             onClick={handlePasswordResetSubmit}
                                             style={{ backgroundColor: '#082567' }}
-                                            className="w-full py-3 text-white rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-2"
+                                            className="w-full py-3 text-white rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-2 hover:cursor-pointer"
                                         >
                                             <UserPlus className="w-5 h-5" />
                                             Set Password
