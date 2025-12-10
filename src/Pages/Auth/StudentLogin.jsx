@@ -36,8 +36,16 @@ export default function StudentLogin() {
         });
     };
 
-    const handleLoginSubmit = () => {
-        setSubmitted(true);
+    const handleLoginSubmit = async() => {
+        const data = {
+            phone:loginData.phone,
+            password:loginData.password
+        }
+        const res= await axios.post(`${BASE_URL}/api/auth/student-login/`,data)
+        if(res.status===200){
+            setSubmitted(true);
+        }
+       
         // setTimeout(() => {
         //     setSubmitted(false);
         //     setLoginData({ email: '', password: '' });
