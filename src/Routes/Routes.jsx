@@ -8,6 +8,7 @@ import PhotoGallery from "../Pages/Gallary/PhotoGallary";
 import TeacherLogin from "../Pages/Auth/TeacherLogin";
 import StudentLogin from "../Pages/Auth/StudentLogin";
 import StudentPaymentDeatails from "../Pages/payment/StudentPaymentDetails";
+import PrivateRoute from "../privateRoute/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/payment-details",
-        element: <StudentPaymentDeatails />,
+        element: (
+          <PrivateRoute>
+            <StudentPaymentDeatails />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/teacherLogin",

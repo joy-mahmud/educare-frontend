@@ -12,67 +12,78 @@ import {
 } from "lucide-react";
 import { Navigate } from "react-router-dom";
 
+import { BASE_URL } from "../../utils/constants/constants";
+import axiosInstance from "../../api-intercept/axiosInstance";
+
 export default function StudentPaymentDeatails() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [payments, setPayments] = useState([]);
 
   // Sample data - Replace this with actual API call
-  const payments = [
-    {
-      id: 1,
-      phoneNumber: "01712-345678",
-      amount: 5000,
-      status: "completed",
-      transactionId: "TRX123456789",
-      paymentMethod: "bkash",
-      createdAt: "2024-12-10T10:30:00",
-    },
-    {
-      id: 2,
-      phoneNumber: "01812-345678",
-      amount: 3500,
-      status: "pending",
-      transactionId: "TRX987654321",
-      paymentMethod: "nagad",
-      createdAt: "2024-12-09T14:20:00",
-    },
-    {
-      id: 3,
-      phoneNumber: "01912-345678",
-      amount: 7500,
-      status: "completed",
-      transactionId: "TRX456789123",
-      paymentMethod: "rocket",
-      createdAt: "2024-12-08T09:15:00",
-    },
-    {
-      id: 4,
-      phoneNumber: "01712-987654",
-      amount: 4200,
-      status: "failed",
-      transactionId: "TRX321654987",
-      paymentMethod: "bkash",
-      createdAt: "2024-12-07T16:45:00",
-    },
-    {
-      id: 5,
-      phoneNumber: "01812-765432",
-      amount: 6000,
-      status: "completed",
-      transactionId: "TRX789123456",
-      paymentMethod: "nagad",
-      createdAt: "2024-12-06T11:30:00",
-    },
-    {
-      id: 6,
-      phoneNumber: "01912-876543",
-      amount: 2800,
-      status: "pending",
-      transactionId: "TRX654321789",
-      paymentMethod: "rocket",
-      createdAt: "2024-12-05T13:20:00",
-    },
-  ];
+  // const payments = [
+  //   {
+  //     id: 1,
+  //     phoneNumber: "01712-345678",
+  //     amount: 5000,
+  //     status: "completed",
+  //     transactionId: "TRX123456789",
+  //     paymentMethod: "bkash",
+  //     createdAt: "2024-12-10T10:30:00",
+  //   },
+  //   {
+  //     id: 2,
+  //     phoneNumber: "01812-345678",
+  //     amount: 3500,
+  //     status: "pending",
+  //     transactionId: "TRX987654321",
+  //     paymentMethod: "nagad",
+  //     createdAt: "2024-12-09T14:20:00",
+  //   },
+  //   {
+  //     id: 3,
+  //     phoneNumber: "01912-345678",
+  //     amount: 7500,
+  //     status: "completed",
+  //     transactionId: "TRX456789123",
+  //     paymentMethod: "rocket",
+  //     createdAt: "2024-12-08T09:15:00",
+  //   },
+  //   {
+  //     id: 4,
+  //     phoneNumber: "01712-987654",
+  //     amount: 4200,
+  //     status: "failed",
+  //     transactionId: "TRX321654987",
+  //     paymentMethod: "bkash",
+  //     createdAt: "2024-12-07T16:45:00",
+  //   },
+  //   {
+  //     id: 5,
+  //     phoneNumber: "01812-765432",
+  //     amount: 6000,
+  //     status: "completed",
+  //     transactionId: "TRX789123456",
+  //     paymentMethod: "nagad",
+  //     createdAt: "2024-12-06T11:30:00",
+  //   },
+  //   {
+  //     id: 6,
+  //     phoneNumber: "01912-876543",
+  //     amount: 2800,
+  //     status: "pending",
+  //     transactionId: "TRX654321789",
+  //     paymentMethod: "rocket",
+  //     createdAt: "2024-12-05T13:20:00",
+  //   },
+  // ];
+
+  useEffect(() => {
+    axiosInstance
+      .get(`${BASE_URL}/api/payment/student-payment-details/`)
+      .then((res) => setPayments(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   const paymentMethodColors = {
     bkash: { bg: "#E2136E", name: "bKash" },

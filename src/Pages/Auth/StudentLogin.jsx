@@ -3,13 +3,16 @@ import { User, Mail, Lock, Eye, EyeOff, LogIn, UserPlus, CheckCircle, Graduation
 import CopyRight from '../../components/common/CopyRight';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/constants/constants';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function StudentLogin() {
     const [isLogin, setIsLogin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from  = location.state?.from?.pathname || "/"
     const [loginData, setLoginData] = useState({
         phone: '',
         password: ''
@@ -45,6 +48,7 @@ export default function StudentLogin() {
         if(res.status===200){
             setSubmitted(true);
             localStorage.setItem("token", res.data.token);
+            navigate(from,{replace:true})
         }
        
         // setTimeout(() => {
