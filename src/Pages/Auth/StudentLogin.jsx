@@ -44,6 +44,7 @@ export default function StudentLogin() {
         const res= await axios.post(`${BASE_URL}/api/auth/student-login/`,data)
         if(res.status===200){
             setSubmitted(true);
+            localStorage.setItem("token", res.data.token);
         }
        
         // setTimeout(() => {
