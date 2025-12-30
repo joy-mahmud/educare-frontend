@@ -9,11 +9,16 @@ import TeacherLogin from "../Pages/Auth/TeacherLogin";
 import StudentLogin from "../Pages/Auth/StudentLogin";
 import StudentPaymentDeatails from "../Pages/payment/StudentPaymentDetails";
 import PrivateRoute from "../privateRoute/PrivateRoute";
+import AdminHome from "../Pages/Admin/AdminHome";
+import CreateTeacherForm from "../Pages/Admin/CreateTeacher";
+import Dashboard from "../Layout/Dashboard/Dashboard";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement:<ErrorPage/>,
     children: [
       {
         path: "/",
@@ -53,6 +58,35 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path:'dashboard',
+    element:<Dashboard/>,
+    errorElement:<ErrorPage/>,
+    children:[
+      {
+        path:'home',
+        element:<AdminHome/>
+      },
+      {
+        path:'add-teacher',
+        element:<CreateTeacherForm/>
+      },
+    //   {
+    //     path:'student-list',
+    //     element:<StudentList/>
+    //   },
+    //   {
+    //     path:'all-teacher-info',
+    //     element:<AllTeacherInformation/>
+    //   },
+    //   {
+    //   path:'all-payments',
+    //   element:<AllPayments/>
+
+    // },
+    
+  ]
+  }
 ]);
 
 export default router;
