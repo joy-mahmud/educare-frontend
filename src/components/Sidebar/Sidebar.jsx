@@ -3,7 +3,7 @@ import { X, LogOut } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { sidebarRoutes } from "../../config/sidebarRoutes";
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen, role = "teacher" }) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen, role = "admin" }) => {
   return (
     <div
       className={`fixed md:static inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
