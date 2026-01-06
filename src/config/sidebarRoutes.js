@@ -14,7 +14,7 @@ export const sidebarRoutes = [
     roles: ["admin"],
   },
   {
-    path: "/dashboard/student-list",
+    path: "/dashboard/all-student-info",
     label: "Student List",
     icon: Users,
     roles: ["admin", "teacher"],

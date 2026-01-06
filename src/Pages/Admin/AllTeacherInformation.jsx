@@ -348,7 +348,7 @@ export default function AllTeacherInformation() {
           {totalPages > 1 && (
             <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
               <div className="text-sm text-gray-600">
-                Showing {start} to {end} of {totalCount}teachers
+                Showing {start} to {end} of {totalCount} teachers
               </div>
               <div className="flex items-center gap-2">
                 <button

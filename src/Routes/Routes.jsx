@@ -14,6 +14,7 @@ import CreateTeacherForm from "../Pages/Admin/CreateTeacher";
 import Dashboard from "../Layout/Dashboard/Dashboard";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import AllTeacherInformation from "../Pages/Admin/AllTeacherInformation";
+import AllStudentInformation from "../Pages/Admin/AllStudentInformation";
 
 const router = createBrowserRouter([
   {
@@ -72,10 +73,10 @@ const router = createBrowserRouter([
         path: "add-teacher",
         element: <CreateTeacherForm />,
       },
-      //   {
-      //     path:'student-list',
-      //     element:<StudentList/>
-      //   },
+      {
+        path: "all-student-info",
+        element: <AllStudentInformation />,
+      },
       {
         path: "all-teacher-info",
         element: <AllTeacherInformation />,
