@@ -15,6 +15,7 @@ import Dashboard from "../Layout/Dashboard/Dashboard";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import AllTeacherInformation from "../Pages/Admin/AllTeacherInformation";
 import AllStudentInformation from "../Pages/Admin/AllStudentInformation";
+import AllPayments from "../Pages/Admin/AllPayments";
 
 const router = createBrowserRouter([
   {
@@ -81,11 +82,10 @@ const router = createBrowserRouter([
         path: "all-teacher-info",
         element: <AllTeacherInformation />,
       },
-      //   {
-      //   path:'all-payments',
-      //   element:<AllPayments/>
-
-      // },
+      {
+        path: "all-payments",
+        element: <AllPayments />,
+      },
     ],
   },
 ]);
