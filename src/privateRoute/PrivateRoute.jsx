@@ -1,12 +1,31 @@
-import React from "react";
-import { isLoggedIn } from "../utils/helpers/auth";
 import { Navigate, useLocation } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ allowedRoles, allowedUserTypes, children }) => {
+  const { user } = useAuth();
   const location = useLocation();
-  if (!isLoggedIn()) {
-    return <Navigate to={"/studentLogin"} state={{ from: location }} replace />;
+
+  // Not logged in → choose user type
+  if (!user) {
+    return (
+      <Navigate to="/select-user" state={{ from: location.pathname }} replace />
+    );
   }
+
+  // User type check (student / teacher)
+  if (allowedUserTypes && !allowedUserTypes.includes(user.user_type)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  // Teacher role check
+  if (
+    user.user_type === "teacher" &&
+    allowedRoles &&
+    !allowedRoles.includes(user.role)
+  ) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
   return children;
 };
 

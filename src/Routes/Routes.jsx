@@ -16,6 +16,8 @@ import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import AllTeacherInformation from "../Pages/Admin/AllTeacherInformation";
 import AllStudentInformation from "../Pages/Admin/AllStudentInformation";
 import AllPayments from "../Pages/Admin/AllPayments";
+import SelectUser from "../Pages/SelectUser/SelectUser";
+import UnAuthorized from "../Pages/UnAuthorized/UnAthorized";
 
 const router = createBrowserRouter([
   {
@@ -38,18 +40,26 @@ const router = createBrowserRouter([
       {
         path: "/payment-details",
         element: (
-          <PrivateRoute>
+          <PrivateRoute allowedUserTypes={["student"]}>
             <StudentPaymentDeatails />
           </PrivateRoute>
         ),
       },
       {
-        path: "/teacherLogin",
+        path: "select-user",
+        element: <SelectUser />,
+      },
+      {
+        path: "/teacher-login",
         element: <TeacherLogin />,
       },
       {
-        path: "/studentLogin",
+        path: "/student-login",
         element: <StudentLogin />,
+      },
+      {
+        path: "unauthorized",
+        element: <UnAuthorized />,
       },
       {
         path: "/photo-gallary",
@@ -72,19 +82,39 @@ const router = createBrowserRouter([
       },
       {
         path: "add-teacher",
-        element: <CreateTeacherForm />,
+        element: (
+          <PrivateRoute allowedUserTypes={["teacher"]} allowedRoles={["admin"]}>
+            <CreateTeacherForm />
+          </PrivateRoute>
+        ),
       },
       {
         path: "all-student-info",
-        element: <AllStudentInformation />,
+        element: (
+          <PrivateRoute
+            allowedUserTypes={["teacher"]}
+            allowedRoles={["admin", "teacher"]}
+          >
+            <AllStudentInformation />
+          </PrivateRoute>
+        ),
       },
       {
         path: "all-teacher-info",
-        element: <AllTeacherInformation />,
+        element: (
+          <PrivateRoute allowedUserTypes={["teacher"]} allowedRoles={["admin"]}>
+            {" "}
+            <AllTeacherInformation />
+          </PrivateRoute>
+        ),
       },
       {
         path: "all-payments",
-        element: <AllPayments />,
+        element: (
+          <PrivateRoute allowedUserTypes={["teacher"]} allowedRoles={["admin"]}>
+            <AllPayments />
+          </PrivateRoute>
+        ),
       },
     ],
   },

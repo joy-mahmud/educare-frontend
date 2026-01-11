@@ -1,9 +1,14 @@
 import React from "react";
 import { X, LogOut } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { sidebarRoutes } from "../../config/sidebarRoutes";
+import useAuth from "../../hooks/useAuth";
+import { getSidebarRoutes } from "../../utils/helpers/getSidebarRoutes";
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen, role = "admin" }) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
+  const { user, loading } = useAuth();
+  if (loading) return;
+
+  const routes = getSidebarRoutes(user?.role);
   return (
     <div
       className={`fixed md:static inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
@@ -29,29 +34,27 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role = "admin" }) => {
 
         {/* Navigation Links */}
         <nav className="flex-1 p-4 space-y-2">
-          {sidebarRoutes
-            .filter((route) => !route.roles || route.roles.includes(role))
-            .map((route) => {
-              const Icon = route.icon;
+          {routes.map((route) => {
+            const Icon = route.icon;
 
-              return (
-                <NavLink
-                  key={route.path}
-                  to={route.path}
-                  onClick={() => setSidebarOpen(false)}
-                  className={({ isActive }) =>
-                    `w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                      isActive
-                        ? "bg-white bg-opacity-20 text-primary"
-                        : "text-blue-100 hover:bg-white hover:bg-opacity-10 hover:text-primary"
-                    }`
-                  }
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{route.label}</span>
-                </NavLink>
-              );
-            })}
+            return (
+              <NavLink
+                key={route.path}
+                to={route.path}
+                onClick={() => setSidebarOpen(false)}
+                className={({ isActive }) =>
+                  `w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                    isActive
+                      ? "bg-white bg-opacity-20 text-primary"
+                      : "text-blue-100 hover:bg-white hover:bg-opacity-10 hover:text-primary"
+                  }`
+                }
+              >
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{route.label}</span>
+              </NavLink>
+            );
+          })}
         </nav>
 
         {/* Logout */}

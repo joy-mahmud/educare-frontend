@@ -17,6 +17,7 @@ import { BASE_URL } from "../../utils/constants/constants";
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 import CopyRight from "../../components/common/CopyRight";
+import useAuth from "../../hooks/useAuth";
 
 export default function TeacherLogin() {
   const [isLogin, setIsLogin] = useState(true);
@@ -24,7 +25,7 @@ export default function TeacherLogin() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
-
+  const { login } = useAuth();
   const [loginData, setLoginData] = useState({
     teacherId: "",
     password: "",
@@ -63,7 +64,7 @@ export default function TeacherLogin() {
       const res = await axios.post(`${BASE_URL}/api/auth/teacher-login/`, data);
       if (res.status === 200) {
         setSubmitted(true);
-        localStorage.setItem("token", res.data.token);
+        login(res.data.token);
         setTimeout(() => {
           navigate(from, { replace: true });
         }, 2000);

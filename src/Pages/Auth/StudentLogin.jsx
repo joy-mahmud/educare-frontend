@@ -18,6 +18,7 @@ import axios from "axios";
 import { BASE_URL } from "../../utils/constants/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 
 export default function StudentLogin() {
   const [isLogin, setIsLogin] = useState(true);
@@ -26,6 +27,7 @@ export default function StudentLogin() {
   const [submitted, setSubmitted] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const {login} = useAuth()
   const from = location.state?.from?.pathname || "/";
   const [loginData, setLoginData] = useState({
     phone: "",
@@ -61,7 +63,7 @@ export default function StudentLogin() {
       const res = await axios.post(`${BASE_URL}/api/auth/student-login/`, data);
       if (res.status === 200) {
         setSubmitted(true);
-        localStorage.setItem("token", res.data.token);
+        login(res.data.token)
         setTimeout(() => {
           navigate(from, { replace: true });
         }, 2000);

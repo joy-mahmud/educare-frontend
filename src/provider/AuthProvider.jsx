@@ -1,25 +1,35 @@
+import { useEffect, useState } from "react";
 
-import { createContext, useEffect, useState } from "react";
-
-export const AuthContext = createContext(null);
+import { getAuthUser } from "../utils/helpers/getAuthUser";
+import AuthContext from "../context/AuthContext";
 
 const AuthProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false);
-  const [userStudent, setUserStudent] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const SignIn = (email, password) => {
-    setLoading(true);
+  useEffect(() => {
+    const authUser = getAuthUser();
+    setUser(authUser);
+    setLoading(false);
+  }, []);
+
+  const login = (token) => {
+    localStorage.setItem("token", token);
+    const authUser = getAuthUser();
+    setUser(authUser);
   };
 
-//   const logout = () => {
-//     return signOut(auth);
-//   };
-  useEffect(() => {
+  // Prevent rendering before auth check
+  if (loading) return null; // or a loader component
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
 
-  }, []);
-  const authInfo = { loading,user };
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
