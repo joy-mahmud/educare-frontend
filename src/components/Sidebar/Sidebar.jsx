@@ -1,14 +1,37 @@
 import React from "react";
 import { X, LogOut } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { getSidebarRoutes } from "../../utils/helpers/getSidebarRoutes";
+import Swal from "sweetalert2";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
+  const navigate = useNavigate();
   if (loading) return;
 
   const routes = getSidebarRoutes(user?.role);
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to logout!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#082567",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Logout",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        navigate("/");
+        Swal.fire({
+          title: "Logged Out!",
+          text: "Your have successfully logged out.",
+          icon: "success",
+        });
+      }
+    });
+  };
   return (
     <div
       className={`fixed md:static inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
@@ -59,7 +82,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
         {/* Logout */}
         <div className="p-4 border-t border-white border-opacity-20">
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-blue-100 hover:bg-white hover:text-primary hover:bg-opacity-10 transition-all">
+          <button
+            onClick={handleLogout}
+            className="hover:cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-lg text-blue-100 hover:bg-white hover:text-primary hover:bg-opacity-10 transition-all"
+          >
             <LogOut className="w-5 h-5" />
             <span className="font-medium">Logout</span>
           </button>

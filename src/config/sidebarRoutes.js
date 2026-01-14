@@ -2,10 +2,9 @@ import { Home, Users, CreditCard, PlusCircle } from "lucide-react";
 
 export const sidebarRoutes = [
   {
-    path: "/dashboard/home",
+    path: "/",
     label: "Home",
     icon: Home,
-    roles: ["teacher"],
   },
   {
     path: "/dashboard/all-payments",

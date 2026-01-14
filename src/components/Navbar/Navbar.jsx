@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LuMenu } from "react-icons/lu";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo1 from "../../assets/logos/educational-institute-logo-1.png";
 import logo2 from "../../assets/logos/educations-institute-logo-2.webp";
 import { IoIosArrowForward } from "react-icons/io";
@@ -10,11 +10,15 @@ import {
   INSTITUTE_NAME_EN,
 } from "../../utils/constants/constants";
 import { IoClose } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 const Navbar = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileSubmenu, setActiveMobileSubmenu] = useState(null);
   const location = useLocation();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const handleShowDropdown = (menu) => {
     setActiveMenu(menu);
   };
@@ -124,6 +128,27 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
     setActiveMobileSubmenu(null);
   };
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to logout!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#082567",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Logout",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        navigate("/");
+        Swal.fire({
+          title: "Logged Out!",
+          text: "Your have successfully logged out.",
+          icon: "success",
+        });
+      }
+    });
+  };
 
   return (
     <div className="mx-20">
@@ -155,8 +180,71 @@ const Navbar = () => {
         <div className="flex items-center h-full ">
           <div className="h-full">
             <ul className="flex items-center h-full">
-              {menus.map((menu, index) =>
-                menu.subMenu ? (
+              {menus.map((menu, index) => {
+                if (menu.name === "লগইন") {
+                  // ✅ User is logged in → show Logout
+                  if (user) {
+                    return (
+                      <li
+                        key={index}
+                        className="h-full px-2 border-r-[0.5px] border-gray-500 flex items-center hover:bg-secondary cursor-pointer"
+                        onClick={handleLogout}
+                      >
+                        <span className="text-white font-normal text-[12px] xl:text-[14px]">
+                          লগআউট
+                        </span>
+                      </li>
+                    );
+                  }
+
+                  // User NOT logged in → show Login dropdown
+                  return (
+                    <li
+                      key={index}
+                      className="h-full flex items-center border-r-[0.5px] border-gray-500"
+                    >
+                      <div className="relative h-full">
+                        <span
+                          onMouseEnter={() => handleShowDropdown(menu.name)}
+                          onMouseLeave={handleHideDropdown}
+                          className="px-[2px] xl:px-2 flex gap-1 items-center hover:cursor-pointer h-full hover:bg-secondary"
+                        >
+                          <span className="text-white font-normal text-[12px] xl:text-[14px]">
+                            {menu.name}
+                          </span>
+
+                          <MdKeyboardArrowDown
+                            color="white"
+                            className="font-bold mt-1 w-[16px]"
+                          />
+
+                          <ul
+                            className={`absolute left-0 top-[47px] min-w-[150px] border-[0.5px] border-gray-500 bg-primary shadow-xl transition-all duration-500 z-50 ${
+                              activeMenu === menu.name
+                                ? "opacity-100 visible"
+                                : "opacity-0 invisible"
+                            }`}
+                          >
+                            {menu.subMenu.map((submenu, id) => (
+                              <li
+                                key={id}
+                                className="border-b-[0.5px] border-gray-500"
+                              >
+                                <Link
+                                  to={submenu.path}
+                                  className="block w-full px-3 py-2 text-white text-[14px] hover:bg-secondary"
+                                >
+                                  {submenu.name}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </span>
+                      </div>
+                    </li>
+                  );
+                }
+                return menu.subMenu ? (
                   <li
                     key={index}
                     className="h-full flex items-center border-r-[0.5px] border-gray-500"
@@ -217,8 +305,8 @@ const Navbar = () => {
                       {menu.name}
                     </Link>
                   </li>
-                )
-              )}
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -249,62 +337,129 @@ const Navbar = () => {
         </div>
         <div className="overflow-y-auto h-[calc(100%-64px)]">
           <ul className="flex flex-col">
-            {menus.map((menu, index) => (
-              <li key={index} className="border-b border-gray-500">
-                {menu.subMenu ? (
-                  <div>
-                    <button
-                      onClick={() => toggleMobileSubmenu(menu.name)}
-                      className={`w-full px-4 py-3 text-left text-white text-sm font-normal hover:bg-secondary flex gap-2 justify-between items-center hover:cursor-pointer ${
-                        menu.routes?.includes(location.pathname)
-                          ? "bg-secondary"
-                          : ""
-                      }`}
+            {menus.map((menu, index) => {
+              if (menu.name === "লগইন") {
+                // ✅ User is logged in → show Logout
+                if (user) {
+                  return (
+                    <li
+                      key={index}
+                      className="border-b border-gray-700 hover:cursor-pointer"
+                      onClick={handleLogout}
                     >
-                      <span>{menu.name}</span>
-                      <MdKeyboardArrowDown
-                        size={20}
-                        className={`trnsform transition-transform duration-300 ${
-                          activeMobileSubmenu === menu.name ? "rotate-180" : ""
+                      <span className="block px-4 py-3 text-white text-sm hover:bg-secondary transition-colors">
+                        লগআউট
+                      </span>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={index} className="border-b border-gray-500">
+                    <div>
+                      <button
+                        onClick={() => toggleMobileSubmenu(menu.name)}
+                        className={`w-full px-4 py-3 text-left text-white text-sm font-normal hover:bg-secondary flex gap-2 justify-between items-center hover:cursor-pointer ${
+                          menu.routes?.includes(location.pathname)
+                            ? "bg-secondary"
+                            : ""
                         }`}
-                      />
-                    </button>
-                    <ul
-                      className={`bg-gray-800 overflow-hidden transition-all duration-300 ${
-                        activeMobileSubmenu === menu.name
-                          ? "max-h-[500px]"
-                          : "max-h-0"
+                      >
+                        <span>{menu.name}</span>
+                        <MdKeyboardArrowDown
+                          size={20}
+                          className={`trnsform transition-transform duration-300 ${
+                            activeMobileSubmenu === menu.name
+                              ? "rotate-180"
+                              : ""
+                          }`}
+                        />
+                      </button>
+                      <ul
+                        className={`bg-gray-800 overflow-hidden transition-all duration-300 ${
+                          activeMobileSubmenu === menu.name
+                            ? "max-h-[500px]"
+                            : "max-h-0"
+                        }`}
+                      >
+                        {menu.subMenu.map((submenu, id) => (
+                          <li
+                            key={id}
+                            className="border-b border-gray-700 last:border-b-0 hover:cursor-pointer"
+                          >
+                            <Link
+                              to={submenu.path}
+                              onClick={handleLinkClick}
+                              className="block px-6 py-3 text-white text-sm hover:bg-secondary transition-colors"
+                            >
+                              {submenu.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                );
+              }
+
+              return (
+                <li key={index} className="border-b border-gray-500">
+                  {menu.subMenu ? (
+                    <div>
+                      <button
+                        onClick={() => toggleMobileSubmenu(menu.name)}
+                        className={`w-full px-4 py-3 text-left text-white text-sm font-normal hover:bg-secondary flex gap-2 justify-between items-center hover:cursor-pointer ${
+                          menu.routes?.includes(location.pathname)
+                            ? "bg-secondary"
+                            : ""
+                        }`}
+                      >
+                        <span>{menu.name}</span>
+                        <MdKeyboardArrowDown
+                          size={20}
+                          className={`trnsform transition-transform duration-300 ${
+                            activeMobileSubmenu === menu.name
+                              ? "rotate-180"
+                              : ""
+                          }`}
+                        />
+                      </button>
+                      <ul
+                        className={`bg-gray-800 overflow-hidden transition-all duration-300 ${
+                          activeMobileSubmenu === menu.name
+                            ? "max-h-[500px]"
+                            : "max-h-0"
+                        }`}
+                      >
+                        {menu.subMenu.map((submenu, id) => (
+                          <li
+                            key={id}
+                            className="border-b border-gray-700 last:border-b-0 hover:cursor-pointer"
+                          >
+                            <Link
+                              to={submenu.path}
+                              onClick={handleLinkClick}
+                              className="block px-6 py-3 text-white text-sm hover:bg-secondary transition-colors"
+                            >
+                              {submenu.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <Link
+                      to={menu.path}
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-3 text-white text-sm font-normal hover:bg-secondary transition-colors ${
+                        location.pathname === menu.path ? "bg-secondary" : ""
                       }`}
                     >
-                      {menu.subMenu.map((submenu, id) => (
-                        <li
-                          key={id}
-                          className="border-b border-gray-700 last:border-b-0 hover:cursor-pointer"
-                        >
-                          <Link
-                            to={submenu.path}
-                            onClick={handleLinkClick}
-                            className="block px-6 py-3 text-white text-sm hover:bg-secondary transition-colors"
-                          >
-                            {submenu.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : (
-                  <Link
-                    to={menu.path}
-                    onClick={handleLinkClick}
-                    className={`block px-4 py-3 text-white text-sm font-normal hover:bg-secondary transition-colors ${
-                      location.pathname === menu.path ? "bg-secondary" : ""
-                    }`}
-                  >
-                    {menu.name}
-                  </Link>
-                )}
-              </li>
-            ))}
+                      {menu.name}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
