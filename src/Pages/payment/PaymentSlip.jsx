@@ -1,36 +1,146 @@
 import React, { useRef, useState } from "react";
-import { Printer, Download } from "lucide-react";
-import { useReactToPrint } from "react-to-print";
+import { Printer, Search, Loader } from "lucide-react";
+import axiosInstance from "../../api-intercept/axiosInstance";
+import { BASE_URL } from "../../utils/constants/constants";
 
-const PaymentSlip = () => {
-  const [formData, setFormData] = useState({
-    schoolName: "Institute name",
-    schoolAddress: "Dhaka",
-    schoolMobile: "01715324151",
-    studentId: "366",
-    memoNo: "20328",
-    studentName: "Asif Islam",
-    contactNo: "01717087372",
-    class: "Ten",
-    shift: "Morning",
-    section: "A(Hum)",
-    rollNo: "17",
-    items: [
-      { description: "Tuition Fee Jul,Aug", amount: "30" },
-      { description: "Tiffin Fee", amount: "200" },
-      { description: "Exam Fee", amount: "500" },
-      { description: "Tuition Fee Jul,Aug", amount: "30" },
-      { description: "Tiffin Fee", amount: "200" },
-      { description: "Exam Fee", amount: "500" },
-    ],
-  });
+export default function PaymentSlip() {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [slipData, setSlipData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const contentRef = useRef();
 
-  const calculateTotal = () => {
-    return formData.items.reduce(
-      (sum, item) => sum + (parseFloat(item.amount) || 0),
-      0,
-    );
+  const fetchPaymentSlip = async () => {
+    if (!phoneNumber) {
+      setError("Please enter phone number");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const payload = {
+        phoneNumber: phoneNumber,
+        year: year,
+      };
+      // Replace with your actual API endpoint
+      const response = await axiosInstance.post(
+        `${BASE_URL}/api/payment/payment-slip/`,
+        payload
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch payment slip");
+      }
+
+      setSlipData(response.data);
+    } catch (err) {
+      setError(err.message || "Failed to fetch payment slip");
+
+      // Using sample data when API call fails
+      const sampleData = {
+        memo_number: "EDU-2026-SLP-00001",
+        year: 2026,
+        student: {
+          id: 1,
+          name: "Joy Mahmud",
+          phone: phoneNumber || "01926126586",
+        },
+        total_paid: 6400.0,
+        total_payable: 6400.0,
+        due_amount: 0.0,
+        paid_fees: {
+          application_fee_paid: 0,
+          admission_fee_paid: 4000,
+          registration_fee_paid: 0,
+          exam_fee_paid: {
+            first_semester: 0,
+            second_semester: 0,
+          },
+          tuition_fee_paid: {
+            months: ["February", "March"],
+            total_amount: 2400,
+          },
+        },
+        breakdown: {
+          exam_fee: {
+            first_semester: 0,
+            second_semester: 0,
+          },
+          tuition_fee: {
+            amount: 2400,
+            months: ["February", "March"],
+          },
+          admission_fee: 4000,
+          application_fee: 0,
+          registration_fee: 0,
+        },
+        created_at: "2026-01-25T17:11:57.124827Z",
+      };
+      setSlipData(sampleData);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const buildItemsList = () => {
+    if (!slipData) return [];
+
+    const items = [];
+    const breakdown = slipData.breakdown;
+
+    // Application Fee
+    if (breakdown.application_fee > 0) {
+      items.push({
+        description: "Application Fee",
+        amount: breakdown.application_fee,
+      });
+    }
+
+    // Admission Fee
+    if (breakdown.admission_fee > 0) {
+      items.push({
+        description: "Admission Fee",
+        amount: breakdown.admission_fee,
+      });
+    }
+
+    // Registration Fee
+    if (breakdown.registration_fee > 0) {
+      items.push({
+        description: "Registration Fee",
+        amount: breakdown.registration_fee,
+      });
+    }
+
+    // Tuition Fee
+    if (breakdown.tuition_fee.amount > 0) {
+      const months = breakdown.tuition_fee.months.join(", ");
+      items.push({
+        description: `Tuition Fee (${months})`,
+        amount: breakdown.tuition_fee.amount,
+      });
+    }
+
+    // First Semester Exam Fee
+    if (breakdown.exam_fee.first_semester > 0) {
+      items.push({
+        description: "1st Semester Exam Fee",
+        amount: breakdown.exam_fee.first_semester,
+      });
+    }
+
+    // Second Semester Exam Fee
+    if (breakdown.exam_fee.second_semester > 0) {
+      items.push({
+        description: "2nd Semester Exam Fee",
+        amount: breakdown.exam_fee.second_semester,
+      });
+    }
+
+    return items;
   };
 
   const numberToWords = (num) => {
@@ -108,9 +218,9 @@ const PaymentSlip = () => {
     return result.trim() + " Taka Only";
   };
 
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0");
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
     const months = [
       "Jan",
       "Feb",
@@ -125,137 +235,327 @@ const PaymentSlip = () => {
       "Nov",
       "Dec",
     ];
-    const month = months[now.getMonth()];
-    const year = now.getFullYear();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    const ampm = now.getHours() >= 12 ? "pm" : "am";
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    const ampm = date.getHours() >= 12 ? "pm" : "am";
 
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}${ampm}`;
   };
 
-  const handlePrint = useReactToPrint({
-    contentRef: contentRef,
-    documentTitle: `Payment_slip
-    }`,
-    pageStyle: `
-      @page {
-        size: A4 landscape;
-        margin: 0mm;
-      }
-      @media print {
-        body {
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
-        }
-      }
-    `,
-  });
+  const handlePrint = () => {
+    const printContent = contentRef.current;
+    const windowPrint = window.open("", "", "width=800,height=600");
+    windowPrint.document.write(`
+      <html>
+        <head>
+          <title>Payment Slip</title>
+          <style>
+            @page {
+              size: A4 landscape;
+              margin: 10mm;
+            }
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 20px;
+            }
+            .slip-container {
+              display: flex;
+              gap: 20px;
+            }
+            .slip-copy {
+              flex: 1;
+              border: 2px solid #000;
+              padding: 16px;
+              background: white;
+            }
+            .text-center {
+              text-align: center;
+            }
+            .font-bold {
+              font-weight: bold;
+            }
+            .underline {
+              text-decoration: underline;
+            }
+            .text-sm {
+              font-size: 14px;
+            }
+            .mb-3 {
+              margin-bottom: 12px;
+            }
+            .mb-4 {
+              margin-bottom: 16px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              border: 1px solid #000;
+              margin-bottom: 12px;
+            }
+            th, td {
+              border: 1px solid #000;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              font-weight: bold;
+            }
+            .text-right {
+              text-align: right;
+            }
+            .border-dashed {
+              border-top: 2px dashed #999;
+              padding-top: 8px;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+    windowPrint.document.close();
+    windowPrint.focus();
+    windowPrint.print();
+    windowPrint.close();
+  };
 
-  const total = calculateTotal();
-  const dateTime = getCurrentDateTime();
+  const SlipCopy = ({ title }) => {
+    if (!slipData) return null;
 
-  const SlipCopy = ({ title }) => (
-    <div className="flex-1 border-2 border-gray-800 p-4 bg-white">
-      <div className="text-center mb-4">
-        <h2 className="font-bold text-lg">{formData.schoolName}</h2>
-        <p className="text-sm">{formData.schoolAddress}</p>
-        <p className="text-sm">Mobile : {formData.schoolMobile}</p>
-      </div>
+    const items = buildItemsList();
+    const dateTime = formatDateTime(slipData.created_at);
 
-      <div className="text-center mb-3">
-        <p className="font-semibold underline">{title}</p>
-      </div>
+    return (
+      <div className="flex-1 border-2 border-gray-800 p-4 bg-white">
+        <div className="text-center mb-4">
+          <h2 className="font-bold text-lg">Institute Name</h2>
+          <p className="text-sm">Dhaka, Bangladesh</p>
+          <p className="text-sm">Mobile: 01715324151</p>
+        </div>
 
-      <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm mb-3">
-        <div>
-          Student ID <span className="font-semibold">{formData.studentId}</span>
+        <div className="text-center mb-3">
+          <p className="font-semibold underline">{title}</p>
         </div>
-        <div>
-          Memo No <span className="font-semibold">{formData.memoNo}</span>
-        </div>
-        <div className="col-span-2">
-          Date <span className="font-semibold">{dateTime.split(" ")[0]}</span>
-        </div>
-        <div className="col-span-2">
-          Student Name{" "}
-          <span className="font-semibold">{formData.studentName}</span>
-        </div>
-        <div className="col-span-2">
-          Contact No <span className="font-semibold">{formData.contactNo}</span>
-        </div>
-        <div className="col-span-2">
-          Class <span className="font-semibold">{formData.class}</span> Shift{" "}
-          <span className="font-semibold">{formData.shift}</span> Section{" "}
-          <span className="font-semibold">{formData.section}</span> Roll No{" "}
-          <span className="font-semibold">{formData.rollNo}</span>
-        </div>
-      </div>
 
-      <table className="w-full border border-gray-800 text-sm mb-3">
-        <thead>
-          <tr className="border-b border-gray-800">
-            <th className="text-left p-2 border-r border-gray-800">
-              Main Fund Description
-            </th>
-            <th className="text-right p-2">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {formData.items.map((item, index) => (
-            <tr key={index} className="border-b border-gray-800">
-              <td className="p-2 border-r border-gray-800">
-                {item.description}
-              </td>
-              <td className="p-2 text-right">{item.amount}</td>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm mb-3">
+          <div>
+            Student ID:{" "}
+            <span className="font-semibold">{slipData.student.id}</span>
+          </div>
+          <div>
+            Memo No:{" "}
+            <span className="font-semibold">{slipData.memo_number}</span>
+          </div>
+          <div className="col-span-2">
+            Date:{" "}
+            <span className="font-semibold">{dateTime.split(" ")[0]}</span>
+          </div>
+          <div className="col-span-2">
+            Student Name:{" "}
+            <span className="font-semibold">{slipData.student.name}</span>
+          </div>
+          <div className="col-span-2">
+            Contact No:{" "}
+            <span className="font-semibold">{slipData.student.phone}</span>
+          </div>
+          <div className="col-span-2">
+            Academic Year:{" "}
+            <span className="font-semibold">{slipData.year}</span>
+          </div>
+        </div>
+
+        <table className="w-full border border-gray-800 text-sm mb-3">
+          <thead>
+            <tr className="border-b border-gray-800">
+              <th className="text-left p-2 border-r border-gray-800">
+                Fee Description
+              </th>
+              <th className="text-right p-2">Amount</th>
             </tr>
-          ))}
-          <tr className="font-bold">
-            <td className="p-2 border-r border-gray-800">Total Amount</td>
-            <td className="p-2 text-right">{total}/-</td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={index} className="border-b border-gray-800">
+                <td className="p-2 border-r border-gray-800">
+                  {item.description}
+                </td>
+                <td className="p-2 text-right">{item.amount.toFixed(2)}</td>
+              </tr>
+            ))}
+            <tr className="font-bold">
+              <td className="p-2 border-r border-gray-800">Total Amount</td>
+              <td className="p-2 text-right">
+                {slipData.total_paid.toFixed(2)}/-
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <p className="text-sm mb-3">In word : {numberToWords(total)}</p>
+        {slipData.due_amount > 0 && (
+          <div className="text-sm mb-3 p-2 bg-yellow-50 border border-yellow-300 rounded">
+            <p className="font-semibold">
+              Due Amount: ৳{slipData.due_amount.toFixed(2)}
+            </p>
+          </div>
+        )}
 
-      <div className="border-t-2 border-dashed border-gray-400 pt-2 text-sm">
-        <p>{dateTime} Received by : SSLCOMMERZ</p>
+        <p className="text-sm mb-3">
+          In words: {numberToWords(slipData.total_paid)}
+        </p>
+
+        <div className="border-t-2 border-dashed border-gray-400 pt-2 text-sm">
+          <p>{dateTime} - Payment Received</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div
+      style={{ backgroundColor: "#f8fafc" }}
+      className="min-h-screen p-4 md:p-8"
+    >
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          Payment Slip
-        </h1>
+        {/* Header */}
+        <div
+          style={{
+            background: "linear-gradient(135deg, #082567 0%, #103B99 100%)",
+          }}
+          className="rounded-xl p-4 md:p-6 shadow-lg mb-6 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-48 h-48 bg-white opacity-5 rounded-full -mr-24 -mt-24"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white opacity-5 rounded-full -ml-16 -mb-16"></div>
 
-        <div className="grid lg:grid-cols-1 gap-6">
-          {/* Form Section */}
-
-          {/* Preview Section */}
-          <div className="print:hidden">
-            <div className="flex gap-4">
-              <SlipCopy title="Office Copy" />
-              <SlipCopy title="Student's Copy" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-2">
+              <Printer className="w-6 h-6 text-white" />
+              <h1 className="text-xl md:text-2xl font-bold text-white">
+                Payment Slip Generator
+              </h1>
             </div>
-          </div>
-
-          {/* Print Version */}
-          <div ref={contentRef} className="hidden print:block print:col-span-2">
-            <div className="flex gap-4">
-              <SlipCopy title="Office Copy" />
-              <SlipCopy title="Student's Copy" />
-            </div>
+            <p className="text-blue-100 text-xs md:text-sm">
+              Generate and print payment slip by entering phone number and year
+            </p>
           </div>
         </div>
+
+        {/* Search Form */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <h2 className="text-lg font-bold text-gray-800 mb-4">
+            Search Payment Information
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
+                placeholder="Enter phone number (e.g., 01926126586)"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Year <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                value={year}
+                onChange={(e) => setYear(parseInt(e.target.value))}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
+                placeholder="Enter year"
+                min="2020"
+                max="2050"
+              />
+            </div>
+          </div>
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-lg text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
+          <button
+            onClick={fetchPaymentSlip}
+            disabled={loading}
+            style={{ backgroundColor: loading ? "#9ca3af" : "#082567" }}
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 text-white rounded-lg font-semibold hover:shadow-lg transition-all disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <Loader className="w-5 h-5 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                <Search className="w-5 h-5" />
+                Generate Payment Slip
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Payment Slip Preview */}
+        {slipData && (
+          <>
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-gray-800">
+                  Payment Slip Preview
+                </h2>
+                <button
+                  onClick={handlePrint}
+                  style={{ backgroundColor: "#082567" }}
+                  className="flex items-center gap-2 px-4 py-2 text-white rounded-lg font-semibold hover:shadow-lg transition-all"
+                >
+                  <Printer className="w-4 h-4" />
+                  Print Slip
+                </button>
+              </div>
+
+              {/* Preview Section */}
+              <div className="overflow-x-auto">
+                <div className="min-w-[800px] flex gap-4">
+                  <SlipCopy title="Office Copy" />
+                  <SlipCopy title="Student's Copy" />
+                </div>
+              </div>
+            </div>
+
+            {/* Print Version (Hidden) */}
+            <div ref={contentRef} className="hidden">
+              <div className="flex gap-4">
+                <SlipCopy title="Office Copy" />
+                <SlipCopy title="Student's Copy" />
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* No Data State */}
+        {!slipData && !loading && (
+          <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+            <Printer className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-gray-800 mb-2">
+              No Payment Slip Generated
+            </h3>
+            <p className="text-gray-600">
+              Enter phone number and year to generate payment slip
+            </p>
+          </div>
+        )}
       </div>
-      <button onClick={handlePrint}>print</button>
     </div>
   );
-};
-
-export default PaymentSlip;
+}

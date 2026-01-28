@@ -140,7 +140,7 @@ const AllPayments = () => {
     );
 
   const totalAmount = filteredPayments.reduce(
-    (sum, payment) => sum + payment.amount,
+    (sum, payment) => sum + Number(payment.amount),
     0
   );
   const completedPayments = filteredPayments.filter(

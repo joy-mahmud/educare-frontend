@@ -19,7 +19,6 @@ import AllPayments from "../Pages/Admin/AllPayments";
 import SelectUser from "../Pages/SelectUser/SelectUser";
 import UnAuthorized from "../Pages/UnAuthorized/UnAthorized";
 import PaymentSlip from "../Pages/payment/PaymentSlip";
-import PaymentForm from "../Pages/payment/paymentPage2";
 
 const router = createBrowserRouter([
   {
