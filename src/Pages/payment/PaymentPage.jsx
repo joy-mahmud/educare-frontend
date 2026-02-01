@@ -48,8 +48,11 @@ export default function PaymentPage() {
   const fetchPaymentStatus = async () => {
     setLoadingStatus(true);
     try {
-      const res = await axios.get(
-        `${BASE_URL}/api/payment/student-payment-status/?phone=${phoneNumber}`
+      const year = new Date().getFullYear();
+      const data = { phoneNumber: phoneNumber, year: year };
+      const res = await axios.post(
+        `${BASE_URL}/api/payment/student-payment-status/`,
+        data
       );
       setPaymentStatus(res.data);
     } catch (err) {

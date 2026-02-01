@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Printer, Search, Loader } from "lucide-react";
 import axiosInstance from "../../api-intercept/axiosInstance";
 import { BASE_URL } from "../../utils/constants/constants";
+import { useReactToPrint } from "react-to-print";
 
 export default function PaymentSlip() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -31,7 +32,7 @@ export default function PaymentSlip() {
         payload
       );
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Failed to fetch payment slip");
       }
 
@@ -245,84 +246,23 @@ export default function PaymentSlip() {
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}${ampm}`;
   };
 
-  const handlePrint = () => {
-    const printContent = contentRef.current;
-    const windowPrint = window.open("", "", "width=800,height=600");
-    windowPrint.document.write(`
-      <html>
-        <head>
-          <title>Payment Slip</title>
-          <style>
-            @page {
-              size: A4 landscape;
-              margin: 10mm;
-            }
-            body {
-              font-family: Arial, sans-serif;
-              margin: 0;
-              padding: 20px;
-            }
-            .slip-container {
-              display: flex;
-              gap: 20px;
-            }
-            .slip-copy {
-              flex: 1;
-              border: 2px solid #000;
-              padding: 16px;
-              background: white;
-            }
-            .text-center {
-              text-align: center;
-            }
-            .font-bold {
-              font-weight: bold;
-            }
-            .underline {
-              text-decoration: underline;
-            }
-            .text-sm {
-              font-size: 14px;
-            }
-            .mb-3 {
-              margin-bottom: 12px;
-            }
-            .mb-4 {
-              margin-bottom: 16px;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              border: 1px solid #000;
-              margin-bottom: 12px;
-            }
-            th, td {
-              border: 1px solid #000;
-              padding: 8px;
-              text-align: left;
-            }
-            th {
-              font-weight: bold;
-            }
-            .text-right {
-              text-align: right;
-            }
-            .border-dashed {
-              border-top: 2px dashed #999;
-              padding-top: 8px;
-            }
-          </style>
-        </head>
-        <body>
-          ${printContent.innerHTML}
-        </body>
-      </html>
-    `);
-    windowPrint.document.close();
-    windowPrint.focus();
-    windowPrint.print();
-    windowPrint.close();
-  };
+  const handlePrint = useReactToPrint({
+    contentRef: contentRef,
+    documentTitle: `Payment_slip
+    }`,
+    pageStyle: `
+      @page {
+        size: A4 landscape;
+        margin: 5mm;
+      }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+    `,
+  });
 
   const SlipCopy = ({ title }) => {
     if (!slipData) return null;
@@ -512,7 +452,7 @@ export default function PaymentSlip() {
             <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-gray-800">
-                  Payment Slip Preview
+                  Payment Slip Preview {"(print in landscape mode)"}
                 </h2>
                 <button
                   onClick={handlePrint}
@@ -534,7 +474,7 @@ export default function PaymentSlip() {
             </div>
 
             {/* Print Version (Hidden) */}
-            <div ref={contentRef} className="hidden">
+            <div ref={contentRef} className="hidden print:block">
               <div className="flex gap-4">
                 <SlipCopy title="Office Copy" />
                 <SlipCopy title="Student's Copy" />
