@@ -19,6 +19,7 @@ import AllPayments from "../Pages/Admin/AllPayments";
 import SelectUser from "../Pages/SelectUser/SelectUser";
 import UnAuthorized from "../Pages/UnAuthorized/UnAthorized";
 import PaymentSlip from "../Pages/payment/PaymentSlip";
+import SinglePaymentSlip from "../Pages/payment/SinglePaymentSlip";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "payment-slip",
         element: <PaymentSlip />,
+      },
+      {
+        path: "payment-details/single-payment-slip/:id",
+        element: <SinglePaymentSlip />,
       },
       {
         path: "/payment-details",

@@ -9,8 +9,9 @@ import {
   Calendar,
   Phone,
   Hash,
+  Printer,
 } from "lucide-react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import { BASE_URL } from "../../utils/constants/constants";
 import axiosInstance from "../../api-intercept/axiosInstance";
@@ -317,6 +318,14 @@ export default function StudentPaymentDeatails() {
                     </div>
                   </div>
                 </div>
+                <Link
+                  to={`single-payment-slip/${payment.id}`}
+                  className="flex justify-center mt-5"
+                >
+                  <button className="bg-primary rounded-lg px-3 py-2 font-medium text-white text-xl hover:bg-secondary cursor-pointer">
+                    Payment Slip
+                  </button>
+                </Link>
               </div>
             );
           })}
@@ -345,6 +354,9 @@ export default function StudentPaymentDeatails() {
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-white">
                     Date & Time
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                    Payment Slip
                   </th>
                 </tr>
               </thead>
@@ -408,6 +420,13 @@ export default function StudentPaymentDeatails() {
                           <Calendar className="w-4 h-4" />
                           {formatDate(payment.createdAt)}
                         </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <Link to={`single-payment-slip/${payment.id}`}>
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Printer className="w-6 h-6" />
+                          </div>
+                        </Link>
                       </td>
                     </tr>
                   );
