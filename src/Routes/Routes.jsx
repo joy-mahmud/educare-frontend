@@ -20,6 +20,7 @@ import SelectUser from "../Pages/SelectUser/SelectUser";
 import UnAuthorized from "../Pages/UnAuthorized/UnAthorized";
 import PaymentSlip from "../Pages/payment/PaymentSlip";
 import SinglePaymentSlip from "../Pages/payment/SinglePaymentSlip";
+import ResultEntrySystem from "../Pages/Academics/ResultEntry";
 
 const router = createBrowserRouter([
   {
@@ -126,6 +127,10 @@ const router = createBrowserRouter([
             <AllPayments />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "result-entry",
+        element: <ResultEntrySystem />,
       },
     ],
   },

@@ -39,48 +39,6 @@ export default function PaymentSlip() {
       setSlipData(response.data);
     } catch (err) {
       setError(err.message || "Failed to fetch payment slip");
-
-      // Using sample data when API call fails
-      const sampleData = {
-        memo_number: "EDU-2026-SLP-00001",
-        year: 2026,
-        student: {
-          id: 1,
-          name: "Joy Mahmud",
-          phone: phoneNumber || "01926126586",
-        },
-        total_paid: 6400.0,
-        total_payable: 6400.0,
-        due_amount: 0.0,
-        paid_fees: {
-          application_fee_paid: 0,
-          admission_fee_paid: 4000,
-          registration_fee_paid: 0,
-          exam_fee_paid: {
-            first_semester: 0,
-            second_semester: 0,
-          },
-          tuition_fee_paid: {
-            months: ["February", "March"],
-            total_amount: 2400,
-          },
-        },
-        breakdown: {
-          exam_fee: {
-            first_semester: 0,
-            second_semester: 0,
-          },
-          tuition_fee: {
-            amount: 2400,
-            months: ["February", "March"],
-          },
-          admission_fee: 4000,
-          application_fee: 0,
-          registration_fee: 0,
-        },
-        created_at: "2026-01-25T17:11:57.124827Z",
-      };
-      setSlipData(sampleData);
     } finally {
       setLoading(false);
     }

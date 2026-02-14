@@ -449,7 +449,7 @@ export default function SinglePaymentSlip() {
               No Payment Receipt Generated
             </h3>
             <p className="text-gray-600">
-              Enter phone number and transaction ID to generate receipt
+              Something went wrong while fetching the payment information
             </p>
           </div>
         )}
