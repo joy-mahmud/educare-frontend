@@ -12,8 +12,11 @@ import {
   Plus,
 } from "lucide-react";
 import Swal from "sweetalert2";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
+import { BASE_URL } from "../../utils/constants/constants";
 
 export default function ResultEntrySystem() {
+  const [students, setStudents] = useState(null);
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
@@ -26,6 +29,25 @@ export default function ResultEntrySystem() {
     subject: "",
     exam: "",
   });
+  const axiosInstance = useAxiosInstance();
+  const fetchStudentByClass = async () => {
+    const res = await axiosInstance.get(
+      `${BASE_URL}/api/students/student-by-class/${selectedClass}/`
+    );
+    if (res.status === 200) {
+      setStudents(res.data);
+    }
+  };
+  useEffect(() => {
+    try {
+      if (!selectedClass) {
+        return;
+      }
+      fetchStudentByClass();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [selectedClass]);
 
   // Master Data
   const classes = [
@@ -214,9 +236,9 @@ export default function ResultEntrySystem() {
     },
   ];
 
-  const filteredStudents = allStudents.filter((s) =>
-    selectedClass ? s.class === selectedClass : true
-  );
+  // const students = allStudents.filter((s) =>
+  //   selectedClass ? s.class === selectedClass : true
+  // );
 
   const calculateGrade = (marks) => {
     if (marks >= 80) return "A+";
@@ -308,6 +330,7 @@ export default function ResultEntrySystem() {
     if (viewFilter.exam && r.exam !== viewFilter.exam) return false;
     return true;
   });
+  console.log(selectedClass);
 
   return (
     <div
@@ -393,7 +416,7 @@ export default function ResultEntrySystem() {
                   >
                     <option value="">-- Select Class --</option>
                     {classes.map((cls) => (
-                      <option key={cls.id} value={cls.name}>
+                      <option key={cls.id} value={cls.id}>
                         Class {cls.name}
                       </option>
                     ))}
@@ -502,8 +525,8 @@ export default function ResultEntrySystem() {
                     <div className="flex items-center gap-2">
                       <Users className="w-5 h-5 text-white" />
                       <h2 className="text-lg font-bold text-white">
-                        Students - Class {selectedClass} (
-                        {filteredStudents.length} students)
+                        Students - Class {selectedClass} ({students.length}{" "}
+                        students)
                       </h2>
                     </div>
                   </div>
@@ -531,7 +554,7 @@ export default function ResultEntrySystem() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {filteredStudents.map((student) => {
+                      {students.map((student) => {
                         const studentResult = results[student.id] || {
                           marks: "",
                           grade: "-",
@@ -552,10 +575,10 @@ export default function ResultEntrySystem() {
                                   className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
                                   style={{ backgroundColor: "#082567" }}
                                 >
-                                  {student.name.charAt(0)}
+                                  {student.studentName.charAt(0)}
                                 </div>
                                 <span className="font-semibold text-gray-800">
-                                  {student.name}
+                                  {student.studentName}
                                 </span>
                               </div>
                             </td>
@@ -617,9 +640,7 @@ export default function ResultEntrySystem() {
                     <div className="text-sm text-gray-600">
                       <p>
                         Total Students:{" "}
-                        <span className="font-semibold">
-                          {filteredStudents.length}
-                        </span>
+                        <span className="font-semibold">{students.length}</span>
                       </p>
                       <p>
                         Marks Entered:{" "}
