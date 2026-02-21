@@ -29,6 +29,7 @@ export default function ResultEntrySystem() {
     subject: "",
     exam: "",
   });
+  const [subjects, setSubjects] = useState([]);
   const axiosInstance = useAxiosInstance();
   const fetchStudentByClass = async () => {
     const res = await axiosInstance.get(
@@ -38,12 +39,31 @@ export default function ResultEntrySystem() {
       setStudents(res.data);
     }
   };
+  const fetchClassSubjects = async (classId) => {
+    const res = await axiosInstance.get(
+      `${BASE_URL}/api/academics/class-subjects/${classId}/`
+    );
+
+    setSubjects(res.data);
+  };
+
   useEffect(() => {
     try {
       if (!selectedClass) {
         return;
       }
       fetchStudentByClass();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [selectedClass]);
+
+  useEffect(() => {
+    try {
+      if (!selectedClass) {
+        return;
+      }
+      fetchClassSubjects(selectedClass);
     } catch (error) {
       console.log(error);
     }
@@ -64,60 +84,60 @@ export default function ResultEntrySystem() {
     { id: 3, name: "Arts" },
   ];
 
-  const subjects = {
-    compulsory: [
-      { id: 1, name: "Bangla", type: "COMPULSORY" },
-      { id: 2, name: "English", type: "COMPULSORY" },
-      { id: 3, name: "Mathematics", type: "COMPULSORY" },
-      { id: 4, name: "Bangladesh and Global Studies", type: "COMPULSORY" },
-      { id: 5, name: "Religion", type: "COMPULSORY" },
-      { id: 6, name: "ICT", type: "COMPULSORY" },
-    ],
-    science: [
-      { id: 7, name: "Physics", type: "GROUP_COMPULSORY", group: "Science" },
-      { id: 8, name: "Chemistry", type: "GROUP_COMPULSORY", group: "Science" },
-      { id: 9, name: "Biology", type: "GROUP_COMPULSORY", group: "Science" },
-      {
-        id: 10,
-        name: "Higher Mathematics",
-        type: "GROUP_COMPULSORY",
-        group: "Science",
-      },
-    ],
-    commerce: [
-      {
-        id: 11,
-        name: "Accounting",
-        type: "GROUP_COMPULSORY",
-        group: "Commerce",
-      },
-      {
-        id: 12,
-        name: "Business Entrepreneurship",
-        type: "GROUP_COMPULSORY",
-        group: "Commerce",
-      },
-      {
-        id: 13,
-        name: "Finance and Banking",
-        type: "GROUP_COMPULSORY",
-        group: "Commerce",
-      },
-    ],
-    arts: [
-      { id: 14, name: "History", type: "GROUP_COMPULSORY", group: "Arts" },
-      { id: 15, name: "Geography", type: "GROUP_COMPULSORY", group: "Arts" },
-      { id: 16, name: "Civics", type: "GROUP_COMPULSORY", group: "Arts" },
-      { id: 17, name: "Economics", type: "GROUP_COMPULSORY", group: "Arts" },
-    ],
-  };
+  // const subjects = {
+  //   compulsory: [
+  //     { id: 1, name: "Bangla", type: "COMPULSORY" },
+  //     { id: 2, name: "English", type: "COMPULSORY" },
+  //     { id: 3, name: "Mathematics", type: "COMPULSORY" },
+  //     { id: 4, name: "Bangladesh and Global Studies", type: "COMPULSORY" },
+  //     { id: 5, name: "Religion", type: "COMPULSORY" },
+  //     { id: 6, name: "ICT", type: "COMPULSORY" },
+  //   ],
+  //   science: [
+  //     { id: 7, name: "Physics", type: "GROUP_COMPULSORY", group: "Science" },
+  //     { id: 8, name: "Chemistry", type: "GROUP_COMPULSORY", group: "Science" },
+  //     { id: 9, name: "Biology", type: "GROUP_COMPULSORY", group: "Science" },
+  //     {
+  //       id: 10,
+  //       name: "Higher Mathematics",
+  //       type: "GROUP_COMPULSORY",
+  //       group: "Science",
+  //     },
+  //   ],
+  //   commerce: [
+  //     {
+  //       id: 11,
+  //       name: "Accounting",
+  //       type: "GROUP_COMPULSORY",
+  //       group: "Commerce",
+  //     },
+  //     {
+  //       id: 12,
+  //       name: "Business Entrepreneurship",
+  //       type: "GROUP_COMPULSORY",
+  //       group: "Commerce",
+  //     },
+  //     {
+  //       id: 13,
+  //       name: "Finance and Banking",
+  //       type: "GROUP_COMPULSORY",
+  //       group: "Commerce",
+  //     },
+  //   ],
+  //   arts: [
+  //     { id: 14, name: "History", type: "GROUP_COMPULSORY", group: "Arts" },
+  //     { id: 15, name: "Geography", type: "GROUP_COMPULSORY", group: "Arts" },
+  //     { id: 16, name: "Civics", type: "GROUP_COMPULSORY", group: "Arts" },
+  //     { id: 17, name: "Economics", type: "GROUP_COMPULSORY", group: "Arts" },
+  //   ],
+  // };
 
-  const allSubjects = [
-    ...subjects.compulsory,
-    ...subjects.science,
-    ...subjects.commerce,
-    ...subjects.arts,
-  ];
+  // const allSubjects = [
+  //   ...subjects.compulsory,
+  //   ...subjects.science,
+  //   ...subjects.commerce,
+  //   ...subjects.arts,
+  // ];
 
   const exams = [
     { id: 1, name: "First Terminal Exam" },
@@ -281,7 +301,7 @@ export default function ResultEntrySystem() {
       return;
     }
 
-    const selectedSubjectData = allSubjects.find(
+    const selectedSubjectData = subjects.find(
       (s) => s.id === parseInt(selectedSubject)
     );
     const selectedExamData = exams.find((e) => e.name === selectedExam);
@@ -434,32 +454,44 @@ export default function ResultEntrySystem() {
                   >
                     <option value="">-- Select Subject --</option>
                     <optgroup label="Compulsory Subjects">
-                      {subjects.compulsory.map((sub) => (
-                        <option key={sub.id} value={sub.id}>
-                          {sub.name}
-                        </option>
-                      ))}
+                      {subjects.map((sub) => {
+                        if (sub.subject_type === "COMPULSORY")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
                     </optgroup>
                     <optgroup label="Science Group">
-                      {subjects.science.map((sub) => (
-                        <option key={sub.id} value={sub.id}>
-                          {sub.name}
-                        </option>
-                      ))}
+                      {subjects.map((sub) => {
+                        if (sub.group_name === "Science")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
                     </optgroup>
                     <optgroup label="Commerce Group">
-                      {subjects.commerce.map((sub) => (
-                        <option key={sub.id} value={sub.id}>
-                          {sub.name}
-                        </option>
-                      ))}
+                      {subjects.map((sub) => {
+                        if (sub.group_name === "Commerce")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
                     </optgroup>
                     <optgroup label="Arts Group">
-                      {subjects.arts.map((sub) => (
-                        <option key={sub.id} value={sub.id}>
-                          {sub.name}
-                        </option>
-                      ))}
+                      {subjects.map((sub) => {
+                        if (sub.group_name === "Arts")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
                     </optgroup>
                   </select>
                 </div>
@@ -487,11 +519,10 @@ export default function ResultEntrySystem() {
                 <div className="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
                   <p className="text-sm text-blue-800">
                     <span className="font-semibold">Selected:</span> Class{" "}
-                    {selectedClass} -{" "}
+                    {classes[parseInt(selectedClass) - 1].name} -{" "}
                     {
-                      allSubjects.find(
-                        (s) => s.id === parseInt(selectedSubject)
-                      )?.name
+                      subjects.find((s) => s.id === parseInt(selectedSubject))
+                        ?.subject_name
                     }{" "}
                     - {selectedExam}
                   </p>
@@ -709,7 +740,7 @@ export default function ResultEntrySystem() {
                   className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 >
                   <option value="">All Subjects</option>
-                  {allSubjects.map((sub) => (
+                  {subjects.map((sub) => (
                     <option key={sub.id} value={sub.id}>
                       {sub.name}
                     </option>
