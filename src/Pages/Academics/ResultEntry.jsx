@@ -301,30 +301,45 @@ export default function ResultEntrySystem() {
       return;
     }
 
-    const selectedSubjectData = subjects.find(
-      (s) => s.id === parseInt(selectedSubject)
+    // const selectedSubjectData = subjects.find(
+    //   (s) => s.id === parseInt(selectedSubject)
+    // );
+    // const selectedExamData = exams.find((e) => e.name === selectedExam);
+    const payload = {
+      class_subject: selectedSubject,
+      exam: selectedExam,
+      results: Object.entries(results).map((result) => {
+        return {
+          student: parseInt(result[0]),
+          marks_obtained: result[1].marks,
+          grade: result[1].grade,
+        };
+      }),
+    };
+    const res = axiosInstance.post(
+      `${BASE_URL}/api/academics/bulk-result-create/`,
+      payload
     );
-    const selectedExamData = exams.find((e) => e.name === selectedExam);
 
-    const newResults = Object.entries(results).map(([studentId, data]) => {
-      const student = allStudents.find((s) => s.id === parseInt(studentId));
-      return {
-        id: Date.now() + parseInt(studentId),
-        studentId: parseInt(studentId),
-        studentName: student.name,
-        rollNo: student.rollNo,
-        class: selectedClass,
-        group: student.group,
-        subjectId: parseInt(selectedSubject),
-        subjectName: selectedSubjectData.name,
-        exam: selectedExam,
-        marks: data.marks,
-        grade: data.grade,
-        date: new Date().toISOString(),
-      };
-    });
+    // const newResults = Object.entries(results).map(([studentId, data]) => {
+    //   const student = allStudents.find((s) => s.id === parseInt(studentId));
+    //   return {
+    //     id: Date.now() + parseInt(studentId),
+    //     studentId: parseInt(studentId),
+    //     studentName: student.name,
+    //     rollNo: student.rollNo,
+    //     class: selectedClass,
+    //     group: student.group,
+    //     subjectId: parseInt(selectedSubject),
+    //     subjectName: selectedSubjectData.name,
+    //     exam: selectedExam,
+    //     marks: data.marks,
+    //     grade: data.grade,
+    //     date: new Date().toISOString(),
+    //   };
+    // });
 
-    setSavedResults([...savedResults, ...newResults]);
+    // setSavedResults([...savedResults, ...newResults]);
     setSubmitted(true);
 
     setTimeout(() => {
@@ -335,8 +350,6 @@ export default function ResultEntrySystem() {
       setSelectedExam("");
     }, 2000);
   };
-  console.log(savedResults);
-
   const deleteResult = (id) => {
     if (confirm("Are you sure you want to delete this result?")) {
       setSavedResults(savedResults.filter((r) => r.id !== id));
@@ -350,7 +363,6 @@ export default function ResultEntrySystem() {
     if (viewFilter.exam && r.exam !== viewFilter.exam) return false;
     return true;
   });
-  console.log(selectedClass);
 
   return (
     <div
