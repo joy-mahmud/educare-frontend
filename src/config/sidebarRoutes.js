@@ -30,4 +30,10 @@ export const sidebarRoutes = [
     icon: PlusCircle,
     roles: ["admin"],
   },
+  {
+    path: "/dashboard/result-entry",
+    label: "Result Entry",
+    icon: PlusCircle,
+    roles: ["admin", "teacher"],
+  },
 ];

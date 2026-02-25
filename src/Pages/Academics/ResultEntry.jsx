@@ -283,7 +283,7 @@ export default function ResultEntrySystem() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedClass || !selectedSubject || !selectedExam) {
       Swal.fire({
         icon: "error",
@@ -316,10 +316,24 @@ export default function ResultEntrySystem() {
         };
       }),
     };
-    const res = axiosInstance.post(
-      `${BASE_URL}/api/academics/bulk-result-create/`,
-      payload
-    );
+    try {
+      const res = await axiosInstance.post(
+        `${BASE_URL}/api/academics/bulk-result-create/`,
+        payload
+      );
+      if (res.status === 201) {
+        Swal.fire({
+          icon: "success",
+          text: `Stuedents marks of subject ${
+            subjects.find((s) => s.id === parseInt(selectedSubject))
+              ?.subject_name
+          } inserted successfully`,
+        });
+        setResults({});
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     // const newResults = Object.entries(results).map(([studentId, data]) => {
     //   const student = allStudents.find((s) => s.id === parseInt(studentId));
@@ -340,15 +354,15 @@ export default function ResultEntrySystem() {
     // });
 
     // setSavedResults([...savedResults, ...newResults]);
-    setSubmitted(true);
+    // setSubmitted(true);
 
-    setTimeout(() => {
-      setSubmitted(false);
-      setResults({});
-      setSelectedClass("");
-      setSelectedSubject("");
-      setSelectedExam("");
-    }, 2000);
+    // setTimeout(() => {
+    //   setSubmitted(false);
+    //   setResults({});
+    //   setSelectedClass("");
+    //   setSelectedSubject("");
+    //   setSelectedExam("");
+    // }, 2000);
   };
   const deleteResult = (id) => {
     if (confirm("Are you sure you want to delete this result?")) {
@@ -568,8 +582,9 @@ export default function ResultEntrySystem() {
                     <div className="flex items-center gap-2">
                       <Users className="w-5 h-5 text-white" />
                       <h2 className="text-lg font-bold text-white">
-                        Students - Class {selectedClass} ({students.length}{" "}
-                        students)
+                        Students - Class{" "}
+                        {classes[parseInt(selectedClass) - 1].name} (
+                        {students.length} students)
                       </h2>
                     </div>
                   </div>
@@ -752,11 +767,14 @@ export default function ResultEntrySystem() {
                   className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 >
                   <option value="">All Subjects</option>
-                  {subjects.map((sub) => (
-                    <option key={sub.id} value={sub.id}>
-                      {sub.name}
-                    </option>
-                  ))}
+                  {subjects.map((sub) => {
+                    console.log(sub);
+                    return (
+                      <option key={sub.id} value={sub.id}>
+                        {sub.subject_name}
+                      </option>
+                    );
+                  })}
                 </select>
 
                 <select
