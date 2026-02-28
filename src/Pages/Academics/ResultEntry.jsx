@@ -69,6 +69,32 @@ export default function ResultEntrySystem() {
     }
   }, [selectedClass]);
 
+  const fetchStudentResults = async () => {
+    const payload = {
+      class_id: parseInt(selectedClass),
+      subject_id: parseInt(selectedSubject),
+      exam: selectedExam,
+    };
+    const res = await axiosInstance.post(
+      `${BASE_URL}/api/academics/view-results/`,
+      payload
+    );
+    if (res.status === 200) {
+      setSavedResults(res.data);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      activeTab === "view" &&
+      selectedClass &&
+      selectedSubject &&
+      selectedExam
+    ) {
+      fetchStudentResults();
+    }
+  }, [activeTab, selectedClass, selectedSubject, selectedExam]);
+
   // Master Data
   const classes = [
     { id: 1, name: "6" },
@@ -740,62 +766,107 @@ export default function ResultEntrySystem() {
           <>
             {/* View Filters */}
             <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-              <h2 className="text-lg font-bold text-gray-800 mb-4">
-                Filter Results
-              </h2>
+              <div className="flex items-center gap-2 mb-4">
+                <Filter className="w-5 h-5" style={{ color: "#082567" }} />
+                <h2 className="text-lg font-bold text-gray-800">
+                  Selection Criteria
+                </h2>
+              </div>
+
               <div className="grid md:grid-cols-3 gap-4">
-                <select
-                  value={viewFilter.class}
-                  onChange={(e) =>
-                    setViewFilter({ ...viewFilter, class: e.target.value })
-                  }
-                  className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                >
-                  <option value="">All Classes</option>
-                  {classes.map((cls) => (
-                    <option key={cls.id} value={cls.name}>
-                      Class {cls.name}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  value={viewFilter.subject}
-                  onChange={(e) =>
-                    setViewFilter({ ...viewFilter, subject: e.target.value })
-                  }
-                  className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                >
-                  <option value="">All Subjects</option>
-                  {subjects.map((sub) => {
-                    console.log(sub);
-                    return (
-                      <option key={sub.id} value={sub.id}>
-                        {sub.subject_name}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Select Class <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={selectedClass}
+                    onChange={(e) => setSelectedClass(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
+                  >
+                    <option value="">-- Select Class --</option>
+                    {classes.map((cls) => (
+                      <option key={cls.id} value={cls.id}>
+                        Class {cls.name}
                       </option>
-                    );
-                  })}
-                </select>
+                    ))}
+                  </select>
+                </div>
 
-                <select
-                  value={viewFilter.exam}
-                  onChange={(e) =>
-                    setViewFilter({ ...viewFilter, exam: e.target.value })
-                  }
-                  className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                >
-                  <option value="">All Exams</option>
-                  {exams.map((exam) => (
-                    <option key={exam.id} value={exam.name}>
-                      {exam.name}
-                    </option>
-                  ))}
-                </select>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Select Subject <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={selectedSubject}
+                    onChange={(e) => setSelectedSubject(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
+                  >
+                    <option value="">-- Select Subject --</option>
+                    <optgroup label="Compulsory Subjects">
+                      {subjects.map((sub) => {
+                        if (sub.subject_type === "COMPULSORY")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
+                    </optgroup>
+                    <optgroup label="Science Group">
+                      {subjects.map((sub) => {
+                        if (sub.group_name === "Science")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
+                    </optgroup>
+                    <optgroup label="Commerce Group">
+                      {subjects.map((sub) => {
+                        if (sub.group_name === "Commerce")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
+                    </optgroup>
+                    <optgroup label="Arts Group">
+                      {subjects.map((sub) => {
+                        if (sub.group_name === "Arts")
+                          return (
+                            <option key={sub.id} value={sub.id}>
+                              {sub.subject_name}
+                            </option>
+                          );
+                      })}
+                    </optgroup>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Select Exam <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={selectedExam}
+                    onChange={(e) => setSelectedExam(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
+                  >
+                    <option value="">-- Select Exam --</option>
+                    {exams.map((exam) => (
+                      <option key={exam.id} value={exam.name}>
+                        {exam.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
             {/* Saved Results Table */}
-            {filteredSavedResults.length > 0 ? (
+            {savedResults.length > 0 ? (
               <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
@@ -831,13 +902,19 @@ export default function ResultEntrySystem() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {filteredSavedResults.map((result) => (
+                      {savedResults.map((result) => (
                         <tr key={result.id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 font-mono font-semibold">
-                            {result.rollNo}
+                            {result.rollNo ? (
+                              <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-semibold">
+                                {result.rollNo}
+                              </span>
+                            ) : (
+                              "-"
+                            )}
                           </td>
                           <td className="px-6 py-4 font-semibold">
-                            {result.studentName}
+                            {result.student_name}
                           </td>
                           <td className="px-6 py-4">Class {result.class}</td>
                           <td className="px-6 py-4">
@@ -849,10 +926,10 @@ export default function ResultEntrySystem() {
                               "-"
                             )}
                           </td>
-                          <td className="px-6 py-4">{result.subjectName}</td>
+                          <td className="px-6 py-4">{result.subject}</td>
                           <td className="px-6 py-4 text-sm">{result.exam}</td>
                           <td className="px-6 py-4 font-bold">
-                            {result.marks}
+                            {result.marks_obtained}
                           </td>
                           <td className="px-6 py-4">
                             <span
