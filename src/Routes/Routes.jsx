@@ -21,6 +21,7 @@ import UnAuthorized from "../Pages/UnAuthorized/UnAthorized";
 import PaymentSlip from "../Pages/payment/PaymentSlip";
 import SinglePaymentSlip from "../Pages/payment/SinglePaymentSlip";
 import ResultEntrySystem from "../Pages/Academics/ResultEntry";
+import StudentMarkSheet from "../Pages/Admin/StudentMarkSheet";
 
 const router = createBrowserRouter([
   {
@@ -130,7 +131,27 @@ const router = createBrowserRouter([
       },
       {
         path: "result-entry",
-        element: <ResultEntrySystem />,
+        element: (
+          <PrivateRoute
+            allowedUserTypes={["teacher"]}
+            allowedRoles={["admin", "teacher"]}
+          >
+            {" "}
+            <ResultEntrySystem />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "student-marksheet",
+        element: (
+          <PrivateRoute
+            allowedUserTypes={["teacher"]}
+            allowedRoles={["admin", "teacher"]}
+          >
+            {" "}
+            <StudentMarkSheet />
+          </PrivateRoute>
+        ),
       },
     ],
   },

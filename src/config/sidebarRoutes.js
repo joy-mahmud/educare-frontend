@@ -1,4 +1,4 @@
-import { Home, Users, CreditCard, PlusCircle } from "lucide-react";
+import { Home, Users, CreditCard, PlusCircle, Sheet } from "lucide-react";
 
 export const sidebarRoutes = [
   {
@@ -34,6 +34,12 @@ export const sidebarRoutes = [
     path: "/dashboard/result-entry",
     label: "Result Entry",
     icon: PlusCircle,
+    roles: ["admin", "teacher"],
+  },
+  {
+    path: "/dashboard/student-marksheet",
+    label: "Student Marksheet",
+    icon: Sheet,
     roles: ["admin", "teacher"],
   },
 ];
