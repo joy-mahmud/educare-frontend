@@ -287,24 +287,25 @@ export default function ResultEntrySystem() {
   // );
 
   const calculateGrade = (marks) => {
-    if (marks >= 80) return "A+";
-    if (marks >= 70) return "A";
-    if (marks >= 60) return "A-";
-    if (marks >= 50) return "B";
-    if (marks >= 40) return "C";
-    if (marks >= 33) return "D";
-    return "F";
+    if (marks >= 80) return { gpa: 5.0, grade: "A+" };
+    if (marks >= 70) return { gpa: 4.0, grade: "A" };
+    if (marks >= 60) return { gpa: 3.5, grade: "A-" };
+    if (marks >= 50) return { gpa: 3.0, grade: "B" };
+    if (marks >= 40) return { gpa: 2.0, grade: "C" };
+    if (marks >= 33) return { gpa: 1.0, grade: "D" };
+    return { gpa: 0.0, grade: "F" };
   };
 
   const handleMarksChange = (studentId, value) => {
     const marks = parseFloat(value) || 0;
-    const grade = calculateGrade(marks);
+    const { gpa, grade } = calculateGrade(marks);
 
     setResults({
       ...results,
       [studentId]: {
         marks: marks,
         grade: grade,
+        gpa: gpa,
       },
     });
   };
@@ -339,6 +340,7 @@ export default function ResultEntrySystem() {
           student: parseInt(result[0]),
           marks_obtained: result[1].marks,
           grade: result[1].grade,
+          gpa: result[1].gpa,
         };
       }),
     };
@@ -635,6 +637,9 @@ export default function ResultEntrySystem() {
                         <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                           Grade
                         </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                          GPA
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -642,6 +647,7 @@ export default function ResultEntrySystem() {
                         const studentResult = results[student.id] || {
                           marks: "",
                           grade: "-",
+                          gpa: "-",
                         };
                         return (
                           <tr
@@ -710,6 +716,29 @@ export default function ResultEntrySystem() {
                                 }`}
                               >
                                 {studentResult.grade}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span
+                                className={`px-4 py-2 rounded-lg font-bold text-sm ${
+                                  studentResult.gpa === "A+"
+                                    ? "bg-green-100 text-green-800"
+                                    : studentResult.gpa === "A"
+                                      ? "bg-green-50 text-green-700"
+                                      : studentResult.gpa === "A-"
+                                        ? "bg-blue-100 text-blue-700"
+                                        : studentResult.gpa === "B"
+                                          ? "bg-blue-50 text-blue-600"
+                                          : studentResult.gpa === "C"
+                                            ? "bg-yellow-100 text-yellow-700"
+                                            : studentResult.gpa === "D"
+                                              ? "bg-orange-100 text-orange-700"
+                                              : studentResult.gpa === "F"
+                                                ? "bg-red-100 text-red-700"
+                                                : "bg-gray-100 text-gray-500"
+                                }`}
+                              >
+                                {studentResult.gpa}
                               </span>
                             </td>
                           </tr>
@@ -897,6 +926,9 @@ export default function ResultEntrySystem() {
                           Grade
                         </th>
                         <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                          GPA
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-white">
                           Action
                         </th>
                       </tr>
@@ -950,6 +982,27 @@ export default function ResultEntrySystem() {
                               }`}
                             >
                               {result.grade}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span
+                              className={`px-3 py-1 rounded-lg font-bold text-sm ${
+                                result?.gpa === "A+"
+                                  ? "bg-green-100 text-green-800"
+                                  : result?.gpa === "A"
+                                    ? "bg-green-50 text-green-700"
+                                    : result?.gpa === "A-"
+                                      ? "bg-blue-100 text-blue-700"
+                                      : result?.gpa === "B"
+                                        ? "bg-blue-50 text-blue-600"
+                                        : result?.gpa === "C"
+                                          ? "bg-yellow-100 text-yellow-700"
+                                          : result?.gpa === "D"
+                                            ? "bg-orange-100 text-orange-700"
+                                            : "bg-red-100 text-red-700"
+                              }`}
+                            >
+                              {result?.gpa ?? "-"}
                             </span>
                           </td>
                           <td className="px-6 py-4">
