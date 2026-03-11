@@ -4,6 +4,8 @@ import useAxiosInstance from "../../hooks/useAxiosInstance";
 import { BASE_URL, INSTITUTE_NAME_EN } from "../../utils/constants/constants";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import instituteLogo from "../../assets/logos/educational-institute-logo-1.png";
+import GradeTable from "../../components/Marksheet/GradeTable";
+import MarksheetTable from "../../components/Marksheet/MarksheetTable";
 
 const SingleStudentMarksheet = ({
   currentStudent,
@@ -13,6 +15,7 @@ const SingleStudentMarksheet = ({
   const [studentMarks, setStudentMarks] = useState([]);
   const [loading, setLoading] = useState(false);
   const axiosInstance = useAxiosInstance();
+
   const fetchStudentMarks = async () => {
     try {
       setLoading(true);
@@ -21,6 +24,7 @@ const SingleStudentMarksheet = ({
         `${BASE_URL}/api/academics/student-exam-marks/`,
         data
       );
+      setStudentMarks(res.data);
     } catch (error) {
       console.error("API Error:", error.response?.data || error.message);
     } finally {
@@ -60,12 +64,17 @@ const SingleStudentMarksheet = ({
           <img
             src={instituteLogo}
             alt="institute logo"
-            className="h-[100px] w-[100px]"
+            className="h-[80px] w-[80px]"
           />
+          <h2 className="border-b-2 pb-1 text-xl font-semibold">
+            Academic Transcript
+          </h2>
         </div>
-        <div className="absolute top-14 left-5">
-          <p>Name:{currentStudent.studentName}</p>
-          <p>Roll No:{currentStudent?.rollNo}</p>
+        <div className="ml-5 text-[18px]">
+          <p>Name: {currentStudent.studentName}</p>
+          <p>Mother's Name: {currentStudent?.motherName}</p>
+          <p>Father's Name: {currentStudent?.FatherName}</p>
+          <p>Roll No: {currentStudent?.rollNo}</p>
           <p>
             Class:
             {classes.map((cls) => {
@@ -75,6 +84,12 @@ const SingleStudentMarksheet = ({
             })}
           </p>
           <p>Group:{currentStudent.group}</p>
+        </div>
+        <div className="absolute top-0 right-5">
+          <GradeTable />
+        </div>
+        <div>
+          <MarksheetTable studentMarks={studentMarks} />
         </div>
       </div>
     </div>
