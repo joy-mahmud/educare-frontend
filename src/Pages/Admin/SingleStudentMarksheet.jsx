@@ -70,20 +70,28 @@ const SingleStudentMarksheet = ({
             Academic Transcript
           </h2>
         </div>
-        <div className="ml-5 text-[18px]">
-          <p>Name: {currentStudent.studentName}</p>
-          <p>Mother's Name: {currentStudent?.motherName}</p>
-          <p>Father's Name: {currentStudent?.FatherName}</p>
-          <p>Roll No: {currentStudent?.rollNo}</p>
-          <p>
-            Class:
-            {classes.map((cls) => {
-              if (cls.id === currentStudent.studentClass) {
-                return cls.name;
-              }
-            })}
-          </p>
-          <p>Group:{currentStudent.group}</p>
+        <div className="ml-5 text-[18px] flex justify-between items-end">
+          <div>
+            <p>Name: {currentStudent.studentName}</p>
+            <p>Student Id: N/A</p>
+            <p>Mother's Name: {currentStudent?.motherName}</p>
+            <p>Father's Name: {currentStudent?.FatherName}</p>
+            <p>Roll No: {currentStudent?.rollNo}</p>
+            <p>
+              Class:
+              {classes.map((cls) => {
+                if (cls.id === currentStudent.studentClass) {
+                  return cls.name;
+                }
+              })}
+            </p>
+          </div>
+          <div>
+            <p>Exam:{exam}</p>
+            <p>Year/Session:{currentStudent.academicYear}</p>
+            <p>Group:{currentStudent.group}</p>
+          </div>
+          <div></div>
         </div>
         <div className="absolute top-0 right-5">
           <GradeTable />

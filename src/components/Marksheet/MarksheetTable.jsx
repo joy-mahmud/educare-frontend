@@ -1,6 +1,7 @@
 import React from "react";
 
 const MarksheetTable = ({ studentMarks }) => {
+  console.log(studentMarks);
   const marksData = [
     {
       srl: 1,
@@ -128,7 +129,7 @@ const MarksheetTable = ({ studentMarks }) => {
           </tr>
         </thead>
         <tbody>
-          {studentMarks.map((row, index) => (
+          {studentMarks?.subjects_marks?.map((row, index) => (
             <tr key={index} className="hover:bg-gray-50 transition-colors">
               <td className="border border-black px-2 py-1">{index + 1}</td>
               <td className="border border-black px-4 py-1 text-left font-medium">
@@ -155,12 +156,20 @@ const MarksheetTable = ({ studentMarks }) => {
           ))}
           {/* Footer Row */}
           <tr className="bg-gray-50 font-bold">
-            <td className="border border-black px-4 py-2 text-left" colSpan="5">
+            <td className="border border-black px-4 py-2 text-left" colSpan="2">
               Total Marks & Total GP
             </td>
-            <td className="border border-black px-2 py-2">218</td>
+            <td className="border border-black px-2 py-2">
+              {studentMarks?.total_full_marks}
+            </td>
+            <td colSpan="2"></td>
+            <td className="border border-black px-2 py-2">
+              {studentMarks?.total_obtained_marks}
+            </td>
             <td className="border border-black" colSpan="2"></td>
-            <td className="border border-black px-2 py-2">6.00</td>
+            <td className="border border-black px-2 py-2">
+              {studentMarks?.final_gpa}
+            </td>
           </tr>
         </tbody>
       </table>
