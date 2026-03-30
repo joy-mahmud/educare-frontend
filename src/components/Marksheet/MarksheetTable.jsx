@@ -129,44 +129,130 @@ const MarksheetTable = ({ studentMarks }) => {
           </tr>
         </thead>
         <tbody>
-          {studentMarks?.subjects_marks?.map((row, index) => (
-            <tr key={index} className="hover:bg-gray-50 transition-colors">
-              <td className="border border-black px-2 py-1">{index + 1}</td>
-              <td className="border border-black px-4 py-1 text-left font-medium">
-                {row.subject}
-              </td>
-              <td className="border border-black px-2 py-1">
-                {row.full_marks}
-              </td>
-              <td className="border border-black px-2 py-1">{row?.marks_cq}</td>
-              <td className="border border-black px-2 py-1">
-                {row?.marks_mcq}
-              </td>
-              <td className="border border-black px-2 py-1 font-bold">
-                {row.marks_obtained}
-              </td>
-              <td className="border border-black px-2 py-1">
-                {row.highest_marks}
-              </td>
-              <td className="border border-black px-2 py-1">{row.grade}</td>
-              <td className="border border-black px-2 py-1 font-semibold">
-                {row.gpa}
-              </td>
-            </tr>
-          ))}
-          {/* Footer Row */}
+          {studentMarks?.subjects_marks?.map((row, index) => {
+            // GROUPED SUBJECT (Bangla / English)
+            if (row.parts) {
+              return row.parts.map((part, partIndex) => (
+                <tr key={`${index}-${partIndex}`} className="hover:bg-gray-50">
+                  {/* Serial */}
+                  <td className="border border-black px-2 py-1">
+                    {partIndex === 0 ? index + 1 : ""}
+                  </td>
+
+                  {/* Subject */}
+                  <td className="border border-black px-4 py-1 text-left font-medium">
+                    {part.subject_name}
+                  </td>
+
+                  {/* Full Marks */}
+                  <td className="border border-black px-2 py-1">
+                    {part.full_marks}
+                  </td>
+
+                  {/* CQ */}
+                  <td className="border border-black px-2 py-1">
+                    {part.obtaining_marks?.cq ?? "-"}
+                  </td>
+
+                  {/* MCQ */}
+                  <td className="border border-black px-2 py-1">
+                    {part.obtaining_marks?.mcq ?? "-"}
+                  </td>
+
+                  {/* Total */}
+                  <td className="border border-black px-2 py-1 font-bold">
+                    {part.total_marks}
+                  </td>
+
+                  {/* Highest */}
+                  <td className="border border-black px-2 py-1">
+                    {part.highest_marks}
+                  </td>
+
+                  {/* Letter Grade (rowspan) */}
+                  {partIndex === 0 && (
+                    <td
+                      rowSpan={row.parts.length}
+                      className="border border-black px-2 py-1"
+                    >
+                      {row.combined_letter_grade}
+                    </td>
+                  )}
+
+                  {/* GPA (rowspan) */}
+                  {partIndex === 0 && (
+                    <td
+                      rowSpan={row.parts.length}
+                      className="border border-black px-2 py-1 font-semibold"
+                    >
+                      {row.combined_grade_point}
+                    </td>
+                  )}
+                </tr>
+              ));
+            }
+
+            // NORMAL SUBJECT
+            return (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="border border-black px-2 py-1">{index + 1}</td>
+
+                <td className="border border-black px-4 py-1 text-left font-medium">
+                  {row.subject_name}
+                </td>
+
+                <td className="border border-black px-2 py-1">
+                  {row.full_marks}
+                </td>
+
+                <td className="border border-black px-2 py-1">
+                  {row.obtaining_marks?.cq ?? "-"}
+                </td>
+
+                <td className="border border-black px-2 py-1">
+                  {row.obtaining_marks?.mcq ?? "-"}
+                </td>
+
+                <td className="border border-black px-2 py-1 font-bold">
+                  {row.total_marks}
+                </td>
+
+                <td className="border border-black px-2 py-1">
+                  {row.highest_marks}
+                </td>
+
+                <td className="border border-black px-2 py-1">
+                  {row.letter_grade}
+                </td>
+
+                <td className="border border-black px-2 py-1 font-semibold">
+                  {row.grade_point}
+                </td>
+              </tr>
+            );
+          })}
+
+          {/* Footer */}
           <tr className="bg-gray-50 font-bold">
             <td className="border border-black px-4 py-2 text-left" colSpan="2">
-              Total Marks & Total GP
+              Total Marks & Total GPA
             </td>
+
             <td className="border border-black px-2 py-2">
               {studentMarks?.total_full_marks}
             </td>
+
             <td colSpan="2"></td>
+
             <td className="border border-black px-2 py-2">
               {studentMarks?.total_obtained_marks}
             </td>
-            <td className="border border-black" colSpan="2"></td>
+
+            <td className="border border-black" colSpan="1"></td>
+            <td className="border border-black" colSpan="1">
+              {studentMarks?.final_grade}
+            </td>
+
             <td className="border border-black px-2 py-2">
               {studentMarks?.final_gpa}
             </td>
