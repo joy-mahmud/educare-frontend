@@ -141,7 +141,9 @@ const MarksheetTable = ({ studentMarks }) => {
 
                   {/* Subject */}
                   <td className="border border-black px-4 py-1 text-left font-medium">
-                    {part.subject_name}
+                    {part.is_optional
+                      ? `${part.subject_name} (4th)`
+                      : part.subject_name}
                   </td>
 
                   {/* Full Marks */}
@@ -198,7 +200,9 @@ const MarksheetTable = ({ studentMarks }) => {
                 <td className="border border-black px-2 py-1">{index + 1}</td>
 
                 <td className="border border-black px-4 py-1 text-left font-medium">
-                  {row.subject_name}
+                  {row.is_optional
+                    ? `${row.subject_name} (4th)`
+                    : row.subject_name}
                 </td>
 
                 <td className="border border-black px-2 py-1">
