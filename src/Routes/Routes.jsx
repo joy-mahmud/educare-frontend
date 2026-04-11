@@ -22,7 +22,6 @@ import PaymentSlip from "../Pages/payment/PaymentSlip";
 import SinglePaymentSlip from "../Pages/payment/SinglePaymentSlip";
 import ResultEntrySystem from "../Pages/Academics/ResultEntry";
 import StudentMarkSheet from "../Pages/Admin/StudentMarkSheet";
-import AdmitCard from "../Pages/Admin/AdmitCard";
 import StudentAdmitCard from "../Pages/Admin/StudentAdmitCard";
 
 const router = createBrowserRouter([
@@ -164,7 +163,7 @@ const router = createBrowserRouter([
           >
             {" "}
             {/* <AdmitCard /> */}
-            <StudentAdmitCard/>
+            <StudentAdmitCard />
           </PrivateRoute>
         ),
       },

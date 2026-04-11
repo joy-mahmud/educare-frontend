@@ -1,7 +1,11 @@
 import { ArrowBigLeft } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
-import { BASE_URL, INSTITUTE_NAME_EN } from "../../utils/constants/constants";
+import {
+  BASE_URL,
+  CLASSES,
+  INSTITUTE_NAME_EN,
+} from "../../utils/constants/constants";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import instituteLogo from "../../assets/logos/educational-institute-logo-1.png";
 import GradeTable from "../../components/Marksheet/GradeTable";
@@ -37,13 +41,7 @@ const SingleStudentMarksheet = ({
       fetchStudentMarks();
     }
   }, [currentStudent.id, exam]);
-  const classes = [
-    { id: 1, name: "6" },
-    { id: 2, name: "7" },
-    { id: 3, name: "8" },
-    { id: 4, name: "9" },
-    { id: 5, name: "10" },
-  ];
+
   if (loading) {
     return <LoadingSpinner size={10} />;
   }
@@ -79,7 +77,7 @@ const SingleStudentMarksheet = ({
             <p>Roll No: {currentStudent?.rollNo}</p>
             <p>
               Class:
-              {classes.map((cls) => {
+              {CLASSES.map((cls) => {
                 if (cls.id === currentStudent.studentClass) {
                   return cls.name;
                 }

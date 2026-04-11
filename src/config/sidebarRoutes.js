@@ -42,4 +42,10 @@ export const sidebarRoutes = [
     icon: Sheet,
     roles: ["admin", "teacher"],
   },
+  {
+    path: "/dashboard/student-admit-card",
+    label: "Student Admit Card",
+    icon: Sheet,
+    roles: ["admin", "teacher"],
+  },
 ];
