@@ -9,6 +9,7 @@ import {
 
 export default function SingleStudentAdmitCard({
   currentStudent,
+  examRoutine,
   setViewStudentAdmitCard,
   exam,
 }) {
@@ -35,55 +36,18 @@ export default function SingleStudentAdmitCard({
   //   photo: null,
   // });
 
-  const examRoutine = [
-    {
-      date: "14-11-2025",
-      day: "Thursday",
-      time: "10:00 AM - 12:00 PM",
-      subject: "Bangla",
-      marks: "100",
-    },
-    {
-      date: "16-11-2025",
-      day: "Saturday",
-      time: "10:00 AM - 12:00 PM",
-      subject: "English",
-      marks: "100",
-    },
-    {
-      date: "18-11-2025",
-      day: "Monday",
-      time: "10:00 AM - 12:00 PM",
-      subject: "Mathematics",
-      marks: "100",
-    },
-    {
-      date: "20-11-2025",
-      day: "Wednesday",
-      time: "10:00 AM - 12:00 PM",
-      subject: "Science",
-      marks: "100",
-    },
-    {
-      date: "22-11-2025",
-      day: "Friday",
-      time: "10:00 AM - 12:00 PM",
-      subject: "Social Studies",
-      marks: "100",
-    },
-    {
-      date: "24-11-2025",
-      day: "Sunday",
-      time: "10:00 AM - 12:00 PM",
-      subject: "Religion",
-      marks: "100",
-    },
-  ];
-
   const handlePrint = useReactToPrint({
     contentRef: printRef,
     documentTitle: "student_admit_card",
   });
+  const getDayName = (dateStr) => {
+    const d = new Date(dateStr);
+
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      timeZone: "Asia/Dhaka",
+    }).format(d);
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen p-4 print:p-0">
@@ -132,7 +96,7 @@ export default function SingleStudentAdmitCard({
               </div>
 
               <div className="text-center">
-                <h2 className="text-2xl font-bold">Exam - {exam}</h2>
+                <h2 className="text-2xl font-bold">Exam - {exam.name}</h2>
                 <div className="border px-6 py-1 mt-2 inline-block font-bold">
                   Admit Card
                 </div>
@@ -188,21 +152,27 @@ export default function SingleStudentAdmitCard({
                   <tr className="bg-gray-200">
                     <th className="border px-2 py-1">Date</th>
                     <th className="border px-2 py-1">Day</th>
-                    <th className="border px-2 py-1">Time</th>
+                    <th className="border px-2 py-1">Start Time</th>
+                    <th className="border px-2 py-1">End Time</th>
                     <th className="border px-2 py-1">Subject</th>
                     <th className="border px-2 py-1">Marks</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {examRoutine.map((exam, i) => (
+                  {examRoutine?.routine?.map((routine, i) => (
                     <tr key={i}>
-                      <td className="border px-2 py-1">{exam.date}</td>
-                      <td className="border px-2 py-1">{exam.day}</td>
-                      <td className="border px-2 py-1">{exam.time}</td>
-                      <td className="border px-2 py-1">{exam.subject}</td>
+                      <td className="border px-2 py-1">{routine.exam_date}</td>
+                      <td className="border px-2 py-1">
+                        {getDayName(routine.exam_date)}
+                      </td>
+                      <td className="border px-2 py-1">{routine.start_time}</td>
+                      <td className="border px-2 py-1">{routine.end_time}</td>
+                      <td className="border px-2 py-1">
+                        {routine.subject_name}
+                      </td>
                       <td className="border px-2 py-1 text-center">
-                        {exam.marks}
+                        {routine.full_marks}
                       </td>
                     </tr>
                   ))}

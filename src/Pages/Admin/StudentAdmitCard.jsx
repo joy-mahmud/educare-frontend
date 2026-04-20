@@ -8,9 +8,10 @@ import { Award, BookOpen, Filter, Sheet, Users } from "lucide-react";
 const StudentAdmitCard = () => {
   const [students, setStudents] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
-  const [selectedExam, setSelectedExam] = useState("");
+  const [selectedExam, setSelectedExam] = useState(null);
   const [currentStudent, setCurrentStudent] = useState(null);
   const [viewStudentAdmitCard, setViewStudentAdmitCard] = useState(false);
+  const [routine, setRoutine] = useState(null);
 
   const axiosInstance = useAxiosInstance();
   const fetchStudentByClass = async () => {
@@ -21,12 +22,20 @@ const StudentAdmitCard = () => {
       setStudents(res.data);
     }
   };
+  const fetchExamRoutine = async () => {
+    const res = await axiosInstance.get(
+      `${BASE_URL}/api/academics/exam-routine/?class_id=${selectedClass}&exam_id=${selectedExam.id}`
+    );
+    if (res.status === 200) {
+      setRoutine(res.data);
+    }
+  };
 
   useEffect(() => {
-    if (!selectedClass && !selectedExam) {
-      return;
+    if (selectedClass && selectedExam) {
+      fetchStudentByClass();
+      fetchExamRoutine();
     }
-    fetchStudentByClass();
   }, [selectedClass, selectedExam]);
 
   // Master Data
@@ -48,6 +57,31 @@ const StudentAdmitCard = () => {
   const viewSingleStudentMarksheet = (id) => {
     setCurrentStudent(id);
     setViewStudentAdmitCard(true);
+  };
+  const downloadAdmitCards = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `${BASE_URL}/api/academics/all-student-admit-card/?class_id=${selectedClass}&exam_id=${selectedExam.id}`,
+        {
+          responseType: "blob", // Important for handling PDF data
+        }
+      );
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "admit_cards.pdf");
+
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading the PDF", error);
+    }
   };
 
   return (
@@ -81,6 +115,7 @@ const StudentAdmitCard = () => {
           <SingleStudentAdmitCard
             currentStudent={currentStudent}
             exam={selectedExam}
+            examRoutine={routine}
             setViewStudentAdmitCard={setViewStudentAdmitCard}
           />
         ) : (
@@ -118,13 +153,16 @@ const StudentAdmitCard = () => {
                     Select Exam <span className="text-red-500">*</span>
                   </label>
                   <select
-                    value={selectedExam}
-                    onChange={(e) => setSelectedExam(e.target.value)}
+                    value={selectedExam?.id || ""}
+                    onChange={(e) => {
+                      const exam = exams.find((ex) => ex.id == e.target.value);
+                      setSelectedExam(exam);
+                    }}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
                   >
                     <option value="">-- Select Exam --</option>
                     {exams.map((exam) => (
-                      <option key={exam.id} value={exam.name}>
+                      <option key={exam.id} value={exam.id}>
                         {exam.name}
                       </option>
                     ))}
@@ -149,6 +187,12 @@ const StudentAdmitCard = () => {
                         {students?.length} students)
                       </h2>
                     </div>
+                    <button
+                      onClick={downloadAdmitCards}
+                      className="border border-white p-2 text-white rounded-lg hover:cursor-pointer"
+                    >
+                      Download All
+                    </button>
                   </div>
                 </div>
 
