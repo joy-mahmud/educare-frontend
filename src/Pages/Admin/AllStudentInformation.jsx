@@ -15,6 +15,8 @@ import {
   FileText,
   ChevronLeft,
   ChevronRight,
+  Filter,
+  Download,
 } from "lucide-react";
 import { BASE_URL } from "../../utils/constants/constants";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
@@ -31,6 +33,7 @@ export default function AllStudentInformation() {
   const [totalPages, setTotalPages] = useState(0); // derived
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedClass, setSelectedClass] = useState("");
   const studentsPerPage = 10;
   const start = (currentPage - 1) * studentsPerPage + 1;
   const end = Math.min(currentPage * studentsPerPage, totalCount);
@@ -68,6 +71,29 @@ export default function AllStudentInformation() {
     fetchStudents(currentPage);
   }, [currentPage]);
 
+  const fetchStudentByClass = async () => {
+    const res = await axiosInstance.get(
+      `${BASE_URL}/api/students/student-by-class/${selectedClass}/`
+    );
+    if (res.status === 200) {
+      setStudents(res.data);
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedClass) {
+      return;
+    }
+    fetchStudentByClass();
+  }, [selectedClass]);
+
+  const classes = [
+    { id: 1, name: "6" },
+    { id: 2, name: "7" },
+    { id: 3, name: "8" },
+    { id: 4, name: "9" },
+    { id: 5, name: "10" },
+  ];
   // Pagination calculations
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -103,6 +129,32 @@ export default function AllStudentInformation() {
       month: "long",
       day: "numeric",
     });
+  };
+
+  const handleDowloadStudentList = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `${BASE_URL}/api/academics/download-student-list/?class_id=${selectedClass}`,
+        {
+          responseType: "blob", // Important for handling PDF data
+        }
+      );
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "admit_cards.pdf");
+
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading the PDF", error);
+    }
   };
   if (loading) {
     return (
@@ -168,6 +220,60 @@ export default function AllStudentInformation() {
               <BookOpen className="w-5 h-5 text-gray-400" />
             </div>
             <p className="text-2xl font-bold text-gray-800">1</p>
+          </div>
+        </div>
+        {/* Filter Section */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+          {/* Header Section */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-blue-50">
+              <Filter className="w-5 h-5" style={{ color: "#082567" }} />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+              Selection Criteria
+            </h2>
+          </div>
+
+          {/* Form Row */}
+          <div className="flex flex-col md:flex-row items-end gap-6">
+            {/* Select Input Group */}
+            <div className="flex-1 w-full">
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 ml-1">
+                Select Class <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedClass}
+                  onChange={(e) => setSelectedClass(e.target.value)}
+                  className="w-full appearance-none bg-gray-50 px-4 py-3 border-2 border-transparent rounded-xl focus:outline-none focus:bg-white focus:border-blue-500 transition-all text-gray-700 font-medium cursor-pointer"
+                >
+                  <option value="">-- Choose a Class --</option>
+                  {classes.map((cls) => (
+                    <option key={cls.id} value={cls.id}>
+                      Class {cls.name}
+                    </option>
+                  ))}
+                </select>
+                {/* Custom Arrow for better aesthetics */}
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                  <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="w-full md:w-auto">
+              <button
+                onClick={handleDowloadStudentList}
+                style={{ backgroundColor: "#082567" }}
+                className="h-[52px] w-full md:w-max flex items-center justify-center gap-3 px-8 py-2 text-white rounded-xl font-bold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-blue-900/20"
+              >
+                <Download className="w-5 h-5" />
+                <span>Download Student List</span>
+              </button>
+            </div>
           </div>
         </div>
 
